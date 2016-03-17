@@ -4,12 +4,9 @@ var Player = {};
 Player.speed = 6
 
 Player.initialize = function () {
-  this.x = W/2;
-  this.y = H*6/8;
-  this.vx = 0;
-  this.vy = 0;
+  this.car = Car.create(W/2, H*6/8, "player");
   this.move = {
-    left: false, right: false
+    left: false, right: false, up: false, down: false
   }
 }
 
@@ -45,9 +42,7 @@ Player.axisV = function () {
 }
 
 Player.update = function () {
-  this.vx = this.speed*this.axisH()
-  this.vy = this.speed*this.axisV()
-  this.x = Math.max(Math.min(this.x + this.vx, W-200), 200)
-  this.y = Math.max(Math.min(this.y + this.vy, H), 0)
+  this.car.vx = this.speed*this.axisH()
+  this.car.vy = this.speed*this.axisV()
 }
 

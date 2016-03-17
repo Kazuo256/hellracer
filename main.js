@@ -1,3 +1,56 @@
+
+var Car = {}
+
+Car.initialize = function () {
+  Car.all = []
+  Car.free = []
+}
+
+Car.create = function (x,y,type) {
+  var newcar
+  if (this.free.length > 0) {
+    newcar = this.all[free.shift()];
+  } else {
+    newcar = {}
+    this.all.push(newcar)
+  }
+  newcar.x = x;
+  newcar.y = y;
+  newcar.vx = 0;
+  newcar.vy = 0;
+  newcar.type = type;
+  newcar.alive = true;
+  return newcar;
+}
+
+Car.update = function () {
+  for (var i = 0; i < Car.all.length; ++i) {
+    var car = Car.all[i];
+    if (car.alive) {
+      car.x = Math.max(Math.min(car.x + car.vx, W-200), 200)
+      car.y = Math.max(Math.min(car.y + car.vy, H), 0)
+    }
+  }
+}
+
+Car.draw = function () {
+  for (var i = 0; i < Car.all.length; ++i) {
+    var car = Car.all[i];
+    if (car.alive) {
+      Graphics.car(car.x, car.y, 0, car.vx/Math.abs(car.vx));
+    }
+  }
+}
+
+
+var Enemy = {}
+
+Enemy.all = []
+
+Enemy.initialize = function () {
+
+}
+
 var Game = {};
 
 var W = 800;
@@ -8,6 +61,7 @@ Game.fps = 30;
 Game.initialize = function() {
   document.addEventListener("keydown", this.keyPressed.bind(this), false);
   document.addEventListener("keyup", this.keyReleased.bind(this), false);
+  Car.initialize();
   Player.initialize();
   Graphics.initialize(document.getElementById("canvas").getContext("2d"));
   this.speed = 1;
@@ -38,14 +92,15 @@ Game.keyReleased = function(e) {
 Game.update = function() {
   if (this.active) {
     Player.update();
+    Car.update();
     Graphics.update();
     this.speed += 0.01/this.fps;
   }
 };
 
 Game.draw = function() {
-  Graphics.clear()
-  Graphics.car(Player.x, Player.y, 0, Player.vx)
+  Graphics.clear();
+  Car.draw();
 };
 
 
@@ -95,14 +150,11 @@ Graphics.clear = function () {
 Graphics.car = function (x, y, size, dir) {
   this.setIdentity()
   this.ctx.translate(x, y);
-  if (dir > 0) {
-    this.ctx.rotate(20*Math.PI/180);
-    this.ctx.scale(-1,1)
+  if (Math.abs(dir) > 0.01) {
+    this.ctx.rotate(dir*20*Math.PI/180);
+    this.ctx.scale(-dir,1)
     this.ctx.drawImage(this.car_sprite, 16, 0, 16, 32, -8, -16, 16, 32)
-    this.ctx.scale(-1,1)
-  } else if (dir < 0) {
-    this.ctx.rotate(-20*Math.PI/180);
-    this.ctx.drawImage(this.car_sprite, 16, 0, 16, 32, -8, -16, 16, 32)
+    this.ctx.scale(-dir,1)
   } else
     this.ctx.drawImage(this.car_sprite, 0, 0, 16, 32, -8, -16, 16, 32)
 }
@@ -113,12 +165,9 @@ var Player = {};
 Player.speed = 6
 
 Player.initialize = function () {
-  this.x = W/2;
-  this.y = H*6/8;
-  this.vx = 0;
-  this.vy = 0;
+  this.car = Car.create(W/2, H*6/8, "player");
   this.move = {
-    left: false, right: false
+    left: false, right: false, up: false, down: false
   }
 }
 
@@ -154,9 +203,7 @@ Player.axisV = function () {
 }
 
 Player.update = function () {
-  this.vx = this.speed*this.axisH()
-  this.vy = this.speed*this.axisV()
-  this.x = Math.max(Math.min(this.x + this.vx, W-200), 200)
-  this.y = Math.max(Math.min(this.y + this.vy, H), 0)
+  this.car.vx = this.speed*this.axisH()
+  this.car.vy = this.speed*this.axisV()
 }
 
