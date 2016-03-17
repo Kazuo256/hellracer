@@ -11,46 +11,40 @@ Game.initialize = function() {
   Player.initialize();
   Graphics.initialize(document.getElementById("canvas").getContext("2d"));
   this.speed = 1;
+  this.active = true;
 };
+
+Game.keyChanged = function(key,state) {
+  if (key == '37')
+    Player.moveLeft(state);
+  else if (key == '39')
+    Player.moveRight(state);
+  else if (key == '38')
+    Player.moveUp(state);
+  else if (key == '40')
+    Player.moveDown(state);
+  else if (key == '27' && state)
+    this.active = !this.active;
+}
 
 Game.keyPressed = function(e) {
-  var key = e.keyCode;
-  if (key == '37')
-    Player.moveLeft(true);
-  else if (key == '39')
-    Player.moveRight(true);
-  else if (key == '38')
-    Player.moveUp(true);
-  else if (key == '40')
-    Player.moveDown(true);
-};
+  this.keyChanged(e.keyCode, true);
+}
 
 Game.keyReleased = function(e) {
-  var key = e.keyCode;
-  if (key == '37')
-    Player.moveLeft(false);
-  else if (key == '39')
-    Player.moveRight(false);
-  else if (key == '38')
-    Player.moveUp(false);
-  else if (key == '40')
-    Player.moveDown(false);
-};
+  this.keyChanged(e.keyCode, false);
+}
 
 Game.update = function() {
-  Player.update();
-  Graphics.update();
-  this.speed += 0.01/this.fps;
+  if (this.active) {
+    Player.update();
+    Graphics.update();
+    this.speed += 0.01/this.fps;
+  }
 };
 
 Game.draw = function() {
   Graphics.clear()
-
-  // Your code goes here
-
-  // =====
-  // Example
-  Graphics.car(Player.x, Player.y, 0, Player.axisH())
-  //=====
+  Graphics.car(Player.x, Player.y, 0, Player.vx)
 };
 

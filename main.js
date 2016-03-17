@@ -11,47 +11,41 @@ Game.initialize = function() {
   Player.initialize();
   Graphics.initialize(document.getElementById("canvas").getContext("2d"));
   this.speed = 1;
+  this.active = true;
 };
+
+Game.keyChanged = function(key,state) {
+  if (key == '37')
+    Player.moveLeft(state);
+  else if (key == '39')
+    Player.moveRight(state);
+  else if (key == '38')
+    Player.moveUp(state);
+  else if (key == '40')
+    Player.moveDown(state);
+  else if (key == '27' && state)
+    this.active = !this.active;
+}
 
 Game.keyPressed = function(e) {
-  var key = e.keyCode;
-  if (key == '37')
-    Player.moveLeft(true);
-  else if (key == '39')
-    Player.moveRight(true);
-  else if (key == '38')
-    Player.moveUp(true);
-  else if (key == '40')
-    Player.moveDown(true);
-};
+  this.keyChanged(e.keyCode, true);
+}
 
 Game.keyReleased = function(e) {
-  var key = e.keyCode;
-  if (key == '37')
-    Player.moveLeft(false);
-  else if (key == '39')
-    Player.moveRight(false);
-  else if (key == '38')
-    Player.moveUp(false);
-  else if (key == '40')
-    Player.moveDown(false);
-};
+  this.keyChanged(e.keyCode, false);
+}
 
 Game.update = function() {
-  Player.update();
-  Graphics.update();
-  this.speed += 0.01/this.fps;
+  if (this.active) {
+    Player.update();
+    Graphics.update();
+    this.speed += 0.01/this.fps;
+  }
 };
 
 Game.draw = function() {
   Graphics.clear()
-
-  // Your code goes here
-
-  // =====
-  // Example
-  Graphics.car(Player.x, Player.y, 0, Player.axisH())
-  //=====
+  Graphics.car(Player.x, Player.y, 0, Player.vx)
 };
 
 
@@ -67,7 +61,7 @@ Graphics.scroll = 0;
 Graphics.car_size = 8;
 
 Graphics.update = function () {
-  this.scroll += Game.speed/50;
+  this.scroll += Game.speed/60;
   while (this.scroll >= 1) {
     this.scroll -= 1
   }
@@ -85,12 +79,17 @@ Graphics.clear = function () {
   this.ctx.fillRect(200, 0, 400, 600);
   // Draw stripes
   this.ctx.translate(W/2, -H*(1 - this.scroll));
+  this.ctx.fillStyle = "#232";
   for (var i = 0; i < 10; ++i) {
-    this.ctx.fillStyle = "#aba";
     this.ctx.fillRect(-4, i*H/10, 8, H/30);
     this.ctx.fillRect(-4, (10+i)*H/10, 8, H/30);
   }
-  this.setIdentity()
+  // Draw HUD
+  this.setIdentity();
+  this.ctx.fillStyle = "#eee";
+  this.ctx.font = "32px Helvetica";
+  this.ctx.fillText(Math.floor(Game.speed*100) + "%", 16, 48);
+  this.setIdentity();
 }
 
 Graphics.car = function (x, y, size, dir) {
@@ -137,6 +136,13 @@ Player.moveUp = function (set) {
 
 Player.moveDown = function (set) {
   this.move.down = !!set
+}
+
+Player.stop = function () {
+  this.move.left = false
+  this.move.right = false
+  this.move.up = false
+  this.move.down = false
 }
 
 Player.axisH = function () {

@@ -11,7 +11,7 @@ Graphics.scroll = 0;
 Graphics.car_size = 8;
 
 Graphics.update = function () {
-  this.scroll += Game.speed/50;
+  this.scroll += Game.speed/60;
   while (this.scroll >= 1) {
     this.scroll -= 1
   }
@@ -29,12 +29,17 @@ Graphics.clear = function () {
   this.ctx.fillRect(200, 0, 400, 600);
   // Draw stripes
   this.ctx.translate(W/2, -H*(1 - this.scroll));
+  this.ctx.fillStyle = "#232";
   for (var i = 0; i < 10; ++i) {
-    this.ctx.fillStyle = "#aba";
     this.ctx.fillRect(-4, i*H/10, 8, H/30);
     this.ctx.fillRect(-4, (10+i)*H/10, 8, H/30);
   }
-  this.setIdentity()
+  // Draw HUD
+  this.setIdentity();
+  this.ctx.fillStyle = "#eee";
+  this.ctx.font = "32px Helvetica";
+  this.ctx.fillText(Math.floor(Game.speed*100) + "%", 16, 48);
+  this.setIdentity();
 }
 
 Graphics.car = function (x, y, size, dir) {
