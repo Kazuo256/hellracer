@@ -47,7 +47,7 @@ Game.draw = function() {
 
   // =====
   // Example
-  Graphics.car(Player.x, Player.y, 0, 0)
+  Graphics.car(Player.x, Player.y, 0, Player.axisH())
   //=====
 };
 

@@ -1,7 +1,7 @@
 
 var Player = {};
 
-Player.speed = 8
+Player.speed = 6
 
 Player.initialize = function () {
   this.x = W/2;

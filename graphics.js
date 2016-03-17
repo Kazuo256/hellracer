@@ -19,6 +19,13 @@ Graphics.clear = function () {
 
 Graphics.car = function (x, y, size, dir) {
   this.ctx.translate(x, y);
-  this.ctx.drawImage(this.car_sprite, 0, 0, 16, 32, -8, -16, 16, 32)
+  if (dir > 0) {
+    this.ctx.scale(-1,1)
+    this.ctx.drawImage(this.car_sprite, 16, 0, 16, 32, -8, -16, 16, 32)
+    this.ctx.scale(-1,1)
+  } else if (dir < 0)
+    this.ctx.drawImage(this.car_sprite, 16, 0, 16, 32, -8, -16, 16, 32)
+  else
+    this.ctx.drawImage(this.car_sprite, 0, 0, 16, 32, -8, -16, 16, 32)
 }
 
