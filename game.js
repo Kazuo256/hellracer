@@ -10,6 +10,7 @@ Game.initialize = function() {
   document.addEventListener("keyup", this.keyReleased.bind(this), false);
   Player.initialize();
   Graphics.initialize(document.getElementById("canvas").getContext("2d"));
+  this.speed = 1;
 };
 
 Game.keyPressed = function(e) {
@@ -38,6 +39,8 @@ Game.keyReleased = function(e) {
 
 Game.update = function() {
   Player.update();
+  Graphics.update();
+  this.speed += 0.01/this.fps;
 };
 
 Game.draw = function() {
