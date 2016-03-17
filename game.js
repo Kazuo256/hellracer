@@ -13,32 +13,31 @@ Game.initialize = function() {
 };
 
 Game.keyPressed = function(e) {
-  var key = String.fromCharCode(e.charCode || e.keyCode);
-  if (key == 37)
+  var key = e.keyCode;
+  if (key == '37')
     Player.moveLeft(true);
-  else if (key == 39)
+  else if (key == '39')
     Player.moveRight(true);
+  else if (key == '38')
+    Player.moveUp(true);
+  else if (key == '40')
+    Player.moveDown(true);
 };
 
 Game.keyReleased = function(e) {
-  
+  var key = e.keyCode;
+  if (key == '37')
+    Player.moveLeft(false);
+  else if (key == '39')
+    Player.moveRight(false);
+  else if (key == '38')
+    Player.moveUp(false);
+  else if (key == '40')
+    Player.moveDown(false);
 };
 
 Game.update = function() {
-  // Your code goes here
-
-  // =====
-  // Example
-  //this.rect_x += 1
-  //if (this.rect_x >= 800) {
-  //  this.rect_x = -100
-  //}
-
-  //this.rect_y += 1
-  //if (this.rect_y >= 600) {
-  //  this.rect_y = -100
-  //}
-  // =====
+  Player.update();
 };
 
 Game.draw = function() {

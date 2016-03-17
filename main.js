@@ -1,20 +1,55 @@
+var Game = {};
 
-Player = {};
+var W = 800;
+var H = 600;
+var KEY = null;
+Game.fps = 30;
 
-Player.initialize = function () {
-  this.x = W/2;
-  this.y = H*6/8;
-  this.vx = 0;
-  this.vy = 0;
-}
+Game.initialize = function() {
+  document.addEventListener("keydown", this.keyPressed.bind(this), false);
+  document.addEventListener("keyup", this.keyReleased.bind(this), false);
+  Player.initialize();
+  Graphics.initialize(document.getElementById("canvas").getContext("2d"));
+};
 
-Player.moveLeft = function (set) {
+Game.keyPressed = function(e) {
+  var key = e.keyCode;
+  if (key == '37')
+    Player.moveLeft(true);
+  else if (key == '39')
+    Player.moveRight(true);
+  else if (key == '38')
+    Player.moveUp(true);
+  else if (key == '40')
+    Player.moveDown(true);
+};
 
-}
+Game.keyReleased = function(e) {
+  var key = e.keyCode;
+  if (key == '37')
+    Player.moveLeft(false);
+  else if (key == '39')
+    Player.moveRight(false);
+  else if (key == '38')
+    Player.moveUp(false);
+  else if (key == '40')
+    Player.moveDown(false);
+};
 
-Player.moveRight = function (set) {
+Game.update = function() {
+  Player.update();
+};
 
-}
+Game.draw = function() {
+  Graphics.clear()
+
+  // Your code goes here
+
+  // =====
+  // Example
+  Graphics.car(Player.x, Player.y, 0, 0)
+  //=====
+};
 
 
 var Graphics = {}
@@ -40,57 +75,49 @@ Graphics.car = function (x, y, size, dir) {
   this.ctx.drawImage(this.car_sprite, 0, 0, 16, 32, -8, -16, 16, 32)
 }
 
-var Game = {};
 
-var W = 800;
-var H = 600;
-var KEY = null;
-Game.fps = 30;
+var Player = {};
 
-Game.initialize = function() {
-  document.addEventListener("keydown", this.keyPressed.bind(this), false);
-  document.addEventListener("keyup", this.keyReleased.bind(this), false);
-  Player.initialize();
-  Graphics.initialize(document.getElementById("canvas").getContext("2d"));
-};
+Player.speed = 8
 
-Game.keyPressed = function(e) {
-  var key = String.fromCharCode(e.charCode || e.keyCode);
-  if (key == 37)
-    Player.moveLeft(true);
-  else if (key == 39)
-    Player.moveRight(true);
-};
+Player.initialize = function () {
+  this.x = W/2;
+  this.y = H*6/8;
+  this.vx = 0;
+  this.vy = 0;
+  this.move = {
+    left: false, right: false
+  }
+}
 
-Game.keyReleased = function(e) {
-  
-};
+Player.moveLeft = function (set) {
+  this.move.left = !!set
+}
 
-Game.update = function() {
-  // Your code goes here
+Player.moveRight = function (set) {
+  this.move.right = !!set
+}
 
-  // =====
-  // Example
-  //this.rect_x += 1
-  //if (this.rect_x >= 800) {
-  //  this.rect_x = -100
-  //}
+Player.moveUp = function (set) {
+  this.move.up = !!set
+}
 
-  //this.rect_y += 1
-  //if (this.rect_y >= 600) {
-  //  this.rect_y = -100
-  //}
-  // =====
-};
+Player.moveDown = function (set) {
+  this.move.down = !!set
+}
 
-Game.draw = function() {
-  Graphics.clear()
+Player.axisH = function () {
+  return (this.move.right ? 1 : 0) - (this.move.left ? 1 : 0)
+}
 
-  // Your code goes here
+Player.axisV = function () {
+  return (this.move.down ? 1 : 0) - (this.move.up ? 1 : 0)
+}
 
-  // =====
-  // Example
-  Graphics.car(Player.x, Player.y, 0, 0)
-  //=====
-};
+Player.update = function () {
+  this.vx = this.speed*this.axisH()
+  this.vy = this.speed*this.axisV()
+  this.x = Math.max(Math.min(this.x + this.vx, W-200), 200)
+  this.y = Math.max(Math.min(this.y + this.vy, H), 0)
+}
 
