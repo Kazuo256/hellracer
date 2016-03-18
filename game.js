@@ -8,13 +8,20 @@ Game.fps = 30;
 Game.initialize = function() {
   document.addEventListener("keydown", this.keyPressed.bind(this), false);
   document.addEventListener("keyup", this.keyReleased.bind(this), false);
+  var bgm = document.getElementById("bgm");
+  bgm.loop = true;
+  bgm.play();
+  this.setup();
+};
+
+Game.setup = function () {
   Graphics.initialize(document.getElementById("canvas").getContext("2d"));
   Car.initialize();
   Player.initialize();
   Enemy.initialize();
   this.speed = 1;
   this.state = 'active';
-};
+}
 
 Game.keyChanged = function(key,state) {
   if (key == '37')
@@ -41,6 +48,10 @@ Game.play = function () {
   this.state = 'active';
 }
 
+Game.title = function () {
+  this.state = 'title';
+}
+
 Game.keyPressed = function(e) {
   this.keyChanged(e.keyCode, true);
 }
@@ -60,9 +71,14 @@ Game.update = function() {
 };
 
 Game.draw = function() {
-  if (!this.active) SMOOTH = 0;
-  Graphics.clear();
+  if (this.state != 'active') SMOOTH = 0;
+  Graphics.background();
   Car.bake();      
-  Graphics.draw();
+  Graphics.foreground();
+  if (this.state == 'paused') {
+    Graphics.pauseOverlay();
+  } else if (this.state == 'title') {
+    Graphics.titleOverlay();
+  }
 };
 

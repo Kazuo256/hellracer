@@ -173,13 +173,20 @@ Game.fps = 30;
 Game.initialize = function() {
   document.addEventListener("keydown", this.keyPressed.bind(this), false);
   document.addEventListener("keyup", this.keyReleased.bind(this), false);
+  var bgm = document.getElementById("bgm");
+  bgm.loop = true;
+  bgm.play();
+  this.setup();
+};
+
+Game.setup = function () {
   Graphics.initialize(document.getElementById("canvas").getContext("2d"));
   Car.initialize();
   Player.initialize();
   Enemy.initialize();
   this.speed = 1;
   this.state = 'active';
-};
+}
 
 Game.keyChanged = function(key,state) {
   if (key == '37')
@@ -206,6 +213,10 @@ Game.play = function () {
   this.state = 'active';
 }
 
+Game.title = function () {
+  this.state = 'title';
+}
+
 Game.keyPressed = function(e) {
   this.keyChanged(e.keyCode, true);
 }
@@ -225,10 +236,15 @@ Game.update = function() {
 };
 
 Game.draw = function() {
-  if (!this.active) SMOOTH = 0;
-  Graphics.clear();
+  if (this.state != 'active') SMOOTH = 0;
+  Graphics.background();
   Car.bake();      
-  Graphics.draw();
+  Graphics.foreground();
+  if (this.state == 'paused') {
+    Graphics.pauseOverlay();
+  } else if (this.state == 'title') {
+    Graphics.titleOverlay();
+  }
 };
 
 
@@ -271,10 +287,10 @@ Graphics.setIdentity = function () {
   this.ctx.setTransform(1,0,0,1,0,0);
 }
 
-Graphics.clear = function (smooth) {
+Graphics.background = function (smooth) {
   this.setIdentity();
   // Draw road
-  this.ctx.fillStyle = "#000";
+  this.ctx.fillStyle = "#050505";
   this.ctx.fillRect(0, 0, 800, 600);
   this.ctx.fillStyle = "#101510";
   this.ctx.fillRect(200, 0, 400, 600);
@@ -287,7 +303,7 @@ Graphics.clear = function (smooth) {
   }
 }
 
-Graphics.draw = function () {
+Graphics.foreground = function () {
   for (var i = 0; i < this.all.length; ++i) {
     var sprite = this.all[i];
     if (sprite.alive) {
@@ -301,15 +317,31 @@ Graphics.draw = function () {
   }
   // Lateral columns
   this.setIdentity()
-  this.ctx.fillStyle = "#000";
+  this.ctx.fillStyle = "#050505";
   this.ctx.fillRect(0, 0, 200, 600);
   this.ctx.fillRect(600, 0, 200, 600);
   // Draw HUD
   this.setIdentity();
   this.ctx.fillStyle = "#eee";
   this.ctx.font = "32px Helvetica";
+  this.ctx.textAlign = 'left';
+  this.ctx.baseLine = 'top';
   this.ctx.fillText(Math.floor(Game.speed*100) + "%", 16, 48);
+}
+
+Graphics.pauseOverlay = function () {
   this.setIdentity();
+  this.ctx.fillStyle = "#333";
+  this.ctx.fillRect(300, 265, 200, 70);
+  this.ctx.font = "50px Helvetica";
+  this.ctx.textAlign = 'center';
+  this.ctx.textBaseline = 'middle';
+  this.ctx.fillStyle = "#eee";
+  this.ctx.fillText("PAUSE", 400, 300);
+}
+
+Graphics.titleOverlay = function () {
+
 }
 
 
@@ -358,7 +390,8 @@ Player.axisV = function () {
 
 Player.update = function () {
   if (Car.checkCollisions(this.car)) {
-    Game.pause()
+    // Shinde shimatta
+    Game.title()
   }
   if (this.alive) {
     this.car.vx = this.speed*this.axisH()

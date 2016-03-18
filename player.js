@@ -44,7 +44,8 @@ Player.axisV = function () {
 
 Player.update = function () {
   if (Car.checkCollisions(this.car)) {
-    Game.pause()
+    // Shinde shimatta
+    Game.title()
   }
   if (this.alive) {
     this.car.vx = this.speed*this.axisH()
