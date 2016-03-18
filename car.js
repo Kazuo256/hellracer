@@ -7,31 +7,19 @@ Car.viewmap = {
 }
 
 Car.initialize = function () {
-  Car.all = []
-  Car.free = []
+  makeDomain(this);
 }
 
-Car.create = function (x,y,type) {
-  var newcar
-  if (this.free.length > 0) {
-    newcar = this.all[free.shift()];
-  } else {
-    newcar = {}
-    this.all.push(newcar)
-    newcar.id = this.all.length - 1
-  }
+Car.construct = function (newcar,x,y,type) {
   newcar.x = x;
   newcar.y = y;
   newcar.vx = 0;
   newcar.vy = 0;
   newcar.type = type;
-  newcar.alive = true;
-  return newcar;
 }
 
 Car.destroy = function(car) {
-  car.alive = false;
-  this.free.push(car.id);
+  // nothing
 }
 
 Car.update = function () {

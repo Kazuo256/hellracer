@@ -7,31 +7,19 @@ Car.viewmap = {
 }
 
 Car.initialize = function () {
-  Car.all = []
-  Car.free = []
+  makeDomain(this);
 }
 
-Car.create = function (x,y,type) {
-  var newcar
-  if (this.free.length > 0) {
-    newcar = this.all[free.shift()];
-  } else {
-    newcar = {}
-    this.all.push(newcar)
-    newcar.id = this.all.length - 1
-  }
+Car.construct = function (newcar,x,y,type) {
   newcar.x = x;
   newcar.y = y;
   newcar.vx = 0;
   newcar.vy = 0;
   newcar.type = type;
-  newcar.alive = true;
-  return newcar;
 }
 
 Car.destroy = function(car) {
-  car.alive = false;
-  this.free.push(car.id);
+  // nothing
 }
 
 Car.update = function () {
@@ -55,11 +43,38 @@ Car.draw = function () {
 }
 
 
+var makeDomain = function (domain) {
+  domain.all = []
+  domain.free = []
+  
+  domain.create = function () {
+    var newelement
+    if (this.free.length > 0) {
+      newelement = this.all[free.shift()];
+    } else {
+      newelement = {}
+      this.all.push(newelement)
+      newelement.id = this.all.length - 1
+    }
+    this.construct.apply(
+        this, [newelement].concat(Array.prototype.slice.call(arguments))
+    );
+    newelement.alive = true;
+    return newelement;
+  }
+  
+  domain.remove = function(element) {
+    this.destroy.apply(this, [element]);
+    element.alive = false;
+    this.free.push(element.id);
+  }
+}
+
+
 var Enemy = {}
 
 Enemy.initialize = function () {
-  this.all = []
-  this.free = []
+  makeDomain(this);
   this.create("smallfry", "straight", W/2-100, H/8, [0,2,300]);
   this.create("smallfry", "straight", W/2, H/8,     [0,2,300]);
   this.create("smallfry", "straight", W/2+100, H/8, [0,2,300]);
@@ -84,23 +99,13 @@ Enemy.findAI = function () {
   }
 } ()
 
-Enemy.create = function (type, ai, x, y, extra) {
-  var newenemy;
-  if (this.free.length > 0) {
-    newenemy = this.all[free.shift()];
-  } else {
-    newenemy = {};
-    this.all.push(newenemy);
-  }
+Enemy.construct = function (newenemy, type, ai, x, y, extra) {
   newenemy.update = this.findAI(ai, extra).bind(newenemy);
   newenemy.car = Car.create(x, y, type);
-  newenemy.alive = true;
 }
 
 Enemy.destroy = function(enemy) {
-  enemy.alive = false;
-  Car.destroy(enemy.car);
-  this.free.push(enemy.id);
+  Car.remove(enemy.car);
 }
 
 Enemy.update = function () {
