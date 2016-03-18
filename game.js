@@ -13,7 +13,7 @@ Game.initialize = function() {
   Player.initialize();
   Enemy.initialize();
   this.speed = 1;
-  this.active = true;
+  this.state = 'active';
 };
 
 Game.keyChanged = function(key,state) {
@@ -25,8 +25,20 @@ Game.keyChanged = function(key,state) {
     Player.moveUp(state);
   else if (key == '40')
     Player.moveDown(state);
-  else if (key == '27' && state)
-    this.active = !this.active;
+  else if (key == '27' && state) {
+    if (this.state == 'active')
+      this.pause();
+    else if (this.state == 'paused')
+      this.play()
+  }
+}
+
+Game.pause = function () {
+  this.state = 'paused';
+}
+
+Game.play = function () {
+  this.state = 'active';
 }
 
 Game.keyPressed = function(e) {
@@ -38,7 +50,7 @@ Game.keyReleased = function(e) {
 }
 
 Game.update = function() {
-  if (this.active) {
+  if (this.state == 'active') {
     Player.update();
     Enemy.update();
     Car.update();
