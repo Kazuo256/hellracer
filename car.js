@@ -32,6 +32,20 @@ Car.update = function () {
   }
 }
 
+Car.checkCollisions = function (car) {
+  var collisions = []
+  for (var i = 0; i < Car.all.length; ++i) {
+    if (i != car.id) {
+      var other = this.all[i];
+      var dx = car.x - other.x;
+      var dy = car.y - other.y;
+      if (dx*dx + dy*dy < 4*4)
+        collisions.push(other);
+    }
+  }
+  return collisions;
+}
+
 Car.draw = function () {
   for (var i = 0; i < Car.all.length; ++i) {
     var car = Car.all[i];
