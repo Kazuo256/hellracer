@@ -16,10 +16,12 @@ Car.construct = function (newcar,x,y,type) {
   newcar.vx = 0;
   newcar.vy = 0;
   newcar.type = type;
+  newcar.sprite = Graphics.create("car_sprite", x, y, 16, 32,
+                                  this.viewmap[type]*32, 0, 1, 1, 0);
 }
 
 Car.destroy = function(car) {
-  // nothing
+  Graphics.remove(car.sprite);
 }
 
 Car.update = function () {
@@ -46,12 +48,20 @@ Car.checkCollisions = function (car) {
   return collisions;
 }
 
-Car.draw = function () {
+Car.bake = function () {
   for (var i = 0; i < Car.all.length; ++i) {
     var car = Car.all[i];
-    if (car.alive)
-      Graphics.car(car.x + SMOOTH*car.vx, car.y + SMOOTH*car.vy,
-                   this.viewmap[car.type], car.vx/Math.abs(car.vx));
+    if (car.alive) {
+      car.sprite.x = car.x + SMOOTH*car.vx;
+      car.sprite.y = car.y + SMOOTH*car.vy;
+      var dir = 0;
+      if (car.vx != 0) {
+        dir = car.vx/Math.abs(car.vx);
+        car.sprite.sx = -dir;
+      } else car.sprite.sx = 1;
+      car.sprite.r = dir*20*Math.PI/180;
+      car.sprite.qx = this.viewmap[car.type]*32 + 16*dir*dir;
+    }
   }
 }
 
@@ -139,10 +149,10 @@ Game.fps = 30;
 Game.initialize = function() {
   document.addEventListener("keydown", this.keyPressed.bind(this), false);
   document.addEventListener("keyup", this.keyReleased.bind(this), false);
+  Graphics.initialize(document.getElementById("canvas").getContext("2d"));
   Car.initialize();
   Player.initialize();
   Enemy.initialize();
-  Graphics.initialize(document.getElementById("canvas").getContext("2d"));
   this.speed = 1;
   this.active = true;
 };
@@ -181,20 +191,38 @@ Game.update = function() {
 Game.draw = function() {
   if (!this.active) SMOOTH = 0;
   Graphics.clear();
-  Car.draw();
+  Car.bake();      
+  Graphics.draw();
 };
 
 
 var Graphics = {}
 
-
 Graphics.initialize = function (ctx) {
-  this.ctx = ctx
+  makeDomain(this);
+  this.ctx = ctx;
+  this.scroll = 0;
   this.car_sprite = document.getElementById("car_sprite")
 }
 
-Graphics.scroll = 0;
 Graphics.car_size = 8;
+
+Graphics.construct = function (newsprite, img, x, y, w, h, qx, qy, sx, sy, r) {
+  newsprite.img = document.getElementById(img);
+  newsprite.x = x;
+  newsprite.y = y;
+  newsprite.w = w;
+  newsprite.h = h;
+  newsprite.qx = qx;
+  newsprite.qy = qy;
+  newsprite.sx = sx;
+  newsprite.sy = sy;
+  newsprite.r = r;
+}
+
+Graphics.destroy = function (sprite) {
+  // nothing
+}
 
 Graphics.update = function () {
   this.scroll += Game.speed/60;
@@ -229,16 +257,18 @@ Graphics.clear = function (smooth) {
   this.setIdentity();
 }
 
-Graphics.car = function (x, y, v, dir) {
-  this.setIdentity()
-  this.ctx.translate(x, y);
-  if (Math.abs(dir) > 0.01) {
-    this.ctx.rotate(dir*20*Math.PI/180);
-    this.ctx.scale(-dir,1)
-    this.ctx.drawImage(this.car_sprite, v*32+16, 0, 16, 32, -8, -16, 16, 32)
-    this.ctx.scale(-dir,1)
-  } else
-    this.ctx.drawImage(this.car_sprite, v*32+0, 0, 16, 32, -8, -16, 16, 32)
+Graphics.draw = function () {
+  for (var i = 0; i < this.all.length; ++i) {
+    var sprite = this.all[i];
+    if (sprite.alive) {
+      this.setIdentity();
+      this.ctx.translate(sprite.x, sprite.y);
+      this.ctx.rotate(sprite.r);
+      this.ctx.scale(sprite.sx, sprite.sy);
+      this.ctx.drawImage(sprite.img, sprite.qx, sprite.qy, sprite.w, sprite.h,
+                         -sprite.w/2, -sprite.h/2, sprite.w, sprite.h);
+    }
+  }
 }
 
 

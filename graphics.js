@@ -1,14 +1,31 @@
 
 var Graphics = {}
 
-
 Graphics.initialize = function (ctx) {
-  this.ctx = ctx
+  makeDomain(this);
+  this.ctx = ctx;
+  this.scroll = 0;
   this.car_sprite = document.getElementById("car_sprite")
 }
 
-Graphics.scroll = 0;
 Graphics.car_size = 8;
+
+Graphics.construct = function (newsprite, img, x, y, w, h, qx, qy, sx, sy, r) {
+  newsprite.img = document.getElementById(img);
+  newsprite.x = x;
+  newsprite.y = y;
+  newsprite.w = w;
+  newsprite.h = h;
+  newsprite.qx = qx;
+  newsprite.qy = qy;
+  newsprite.sx = sx;
+  newsprite.sy = sy;
+  newsprite.r = r;
+}
+
+Graphics.destroy = function (sprite) {
+  // nothing
+}
 
 Graphics.update = function () {
   this.scroll += Game.speed/60;
@@ -43,15 +60,17 @@ Graphics.clear = function (smooth) {
   this.setIdentity();
 }
 
-Graphics.car = function (x, y, v, dir) {
-  this.setIdentity()
-  this.ctx.translate(x, y);
-  if (Math.abs(dir) > 0.01) {
-    this.ctx.rotate(dir*20*Math.PI/180);
-    this.ctx.scale(-dir,1)
-    this.ctx.drawImage(this.car_sprite, v*32+16, 0, 16, 32, -8, -16, 16, 32)
-    this.ctx.scale(-dir,1)
-  } else
-    this.ctx.drawImage(this.car_sprite, v*32+0, 0, 16, 32, -8, -16, 16, 32)
+Graphics.draw = function () {
+  for (var i = 0; i < this.all.length; ++i) {
+    var sprite = this.all[i];
+    if (sprite.alive) {
+      this.setIdentity();
+      this.ctx.translate(sprite.x, sprite.y);
+      this.ctx.rotate(sprite.r);
+      this.ctx.scale(sprite.sx, sprite.sy);
+      this.ctx.drawImage(sprite.img, sprite.qx, sprite.qy, sprite.w, sprite.h,
+                         -sprite.w/2, -sprite.h/2, sprite.w, sprite.h);
+    }
+  }
 }
 

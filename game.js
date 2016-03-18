@@ -8,10 +8,10 @@ Game.fps = 30;
 Game.initialize = function() {
   document.addEventListener("keydown", this.keyPressed.bind(this), false);
   document.addEventListener("keyup", this.keyReleased.bind(this), false);
+  Graphics.initialize(document.getElementById("canvas").getContext("2d"));
   Car.initialize();
   Player.initialize();
   Enemy.initialize();
-  Graphics.initialize(document.getElementById("canvas").getContext("2d"));
   this.speed = 1;
   this.active = true;
 };
@@ -50,6 +50,7 @@ Game.update = function() {
 Game.draw = function() {
   if (!this.active) SMOOTH = 0;
   Graphics.clear();
-  Car.draw();
+  Car.bake();      
+  Graphics.draw();
 };
 
