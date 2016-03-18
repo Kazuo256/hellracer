@@ -1,6 +1,11 @@
 
 var Car = {}
 
+Car.viewmap = {
+  player: 0,
+  smallfry: 1
+}
+
 Car.initialize = function () {
   Car.all = []
   Car.free = []
@@ -13,6 +18,7 @@ Car.create = function (x,y,type) {
   } else {
     newcar = {}
     this.all.push(newcar)
+    newcar.id = this.all.length - 1
   }
   newcar.x = x;
   newcar.y = y;
@@ -21,6 +27,11 @@ Car.create = function (x,y,type) {
   newcar.type = type;
   newcar.alive = true;
   return newcar;
+}
+
+Car.destroy = function(car) {
+  car.alive = false;
+  this.free.push(car.id);
 }
 
 Car.update = function () {
@@ -36,19 +47,68 @@ Car.update = function () {
 Car.draw = function () {
   for (var i = 0; i < Car.all.length; ++i) {
     var car = Car.all[i];
-    if (car.alive) {
-      Graphics.car(car.x, car.y, 0, car.vx/Math.abs(car.vx));
-    }
+    if (car.alive)
+      Graphics.car(car.x, car.y, this.viewmap[car.type],
+                   car.vx/Math.abs(car.vx),
+                   car.type == "player" ? 1 : -1);
   }
 }
 
 
 var Enemy = {}
 
-Enemy.all = []
-
 Enemy.initialize = function () {
+  this.all = []
+  this.free = []
+  this.create("smallfry", "straight", W/2-100, H/8, [0,2,300]);
+  this.create("smallfry", "straight", W/2, H/8,     [0,2,300]);
+  this.create("smallfry", "straight", W/2+100, H/8, [0,2,300]);
+}
 
+Enemy.findAI = function () {
+  var AIs = {};
+
+  AIs.straight = function (dx, dy, t) {
+    return function () {
+      if (--t <= 0)
+        Enemy.destroy(this);
+      else {
+        this.car.vx = dx;
+        this.car.vy = dy;
+      }
+    }
+  }
+
+  return function (which, args) {
+    return AIs[which].apply(Enemy, args);
+  }
+} ()
+
+Enemy.create = function (type, ai, x, y, extra) {
+  var newenemy;
+  if (this.free.length > 0) {
+    newenemy = this.all[free.shift()];
+  } else {
+    newenemy = {};
+    this.all.push(newenemy);
+  }
+  newenemy.update = this.findAI(ai, extra).bind(newenemy);
+  newenemy.car = Car.create(x, y, type);
+  newenemy.alive = true;
+}
+
+Enemy.destroy = function(enemy) {
+  enemy.alive = false;
+  Car.destroy(enemy.car);
+  this.free.push(enemy.id);
+}
+
+Enemy.update = function () {
+  for (var i = 0; i < this.all.length; ++i) {
+    var enemy = this.all[i];
+    if (enemy.alive)
+      enemy.update();
+  }
 }
 
 var Game = {};
@@ -63,6 +123,7 @@ Game.initialize = function() {
   document.addEventListener("keyup", this.keyReleased.bind(this), false);
   Car.initialize();
   Player.initialize();
+  Enemy.initialize();
   Graphics.initialize(document.getElementById("canvas").getContext("2d"));
   this.speed = 1;
   this.active = true;
@@ -92,6 +153,7 @@ Game.keyReleased = function(e) {
 Game.update = function() {
   if (this.active) {
     Player.update();
+    Enemy.update();
     Car.update();
     Graphics.update();
     this.speed += 0.01/this.fps;
@@ -147,16 +209,17 @@ Graphics.clear = function () {
   this.setIdentity();
 }
 
-Graphics.car = function (x, y, size, dir) {
+Graphics.car = function (x, y, v, dir, side) {
   this.setIdentity()
   this.ctx.translate(x, y);
+  this.ctx.scale(1,side);
   if (Math.abs(dir) > 0.01) {
     this.ctx.rotate(dir*20*Math.PI/180);
     this.ctx.scale(-dir,1)
-    this.ctx.drawImage(this.car_sprite, 16, 0, 16, 32, -8, -16, 16, 32)
+    this.ctx.drawImage(this.car_sprite, v*32+16, 0, 16, 32, -8, -16, 16, 32)
     this.ctx.scale(-dir,1)
   } else
-    this.ctx.drawImage(this.car_sprite, 0, 0, 16, 32, -8, -16, 16, 32)
+    this.ctx.drawImage(this.car_sprite, v*32+0, 0, 16, 32, -8, -16, 16, 32)
 }
 
 

@@ -42,15 +42,16 @@ Graphics.clear = function () {
   this.setIdentity();
 }
 
-Graphics.car = function (x, y, size, dir) {
+Graphics.car = function (x, y, v, dir, side) {
   this.setIdentity()
   this.ctx.translate(x, y);
+  this.ctx.scale(1,side);
   if (Math.abs(dir) > 0.01) {
     this.ctx.rotate(dir*20*Math.PI/180);
     this.ctx.scale(-dir,1)
-    this.ctx.drawImage(this.car_sprite, 16, 0, 16, 32, -8, -16, 16, 32)
+    this.ctx.drawImage(this.car_sprite, v*32+16, 0, 16, 32, -8, -16, 16, 32)
     this.ctx.scale(-dir,1)
   } else
-    this.ctx.drawImage(this.car_sprite, 0, 0, 16, 32, -8, -16, 16, 32)
+    this.ctx.drawImage(this.car_sprite, v*32+0, 0, 16, 32, -8, -16, 16, 32)
 }
 

@@ -10,6 +10,7 @@ Game.initialize = function() {
   document.addEventListener("keyup", this.keyReleased.bind(this), false);
   Car.initialize();
   Player.initialize();
+  Enemy.initialize();
   Graphics.initialize(document.getElementById("canvas").getContext("2d"));
   this.speed = 1;
   this.active = true;
@@ -39,6 +40,7 @@ Game.keyReleased = function(e) {
 Game.update = function() {
   if (this.active) {
     Player.update();
+    Enemy.update();
     Car.update();
     Graphics.update();
     this.speed += 0.01/this.fps;

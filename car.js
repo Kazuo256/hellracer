@@ -1,6 +1,11 @@
 
 var Car = {}
 
+Car.viewmap = {
+  player: 0,
+  smallfry: 1
+}
+
 Car.initialize = function () {
   Car.all = []
   Car.free = []
@@ -13,6 +18,7 @@ Car.create = function (x,y,type) {
   } else {
     newcar = {}
     this.all.push(newcar)
+    newcar.id = this.all.length - 1
   }
   newcar.x = x;
   newcar.y = y;
@@ -21,6 +27,11 @@ Car.create = function (x,y,type) {
   newcar.type = type;
   newcar.alive = true;
   return newcar;
+}
+
+Car.destroy = function(car) {
+  car.alive = false;
+  this.free.push(car.id);
 }
 
 Car.update = function () {
@@ -36,9 +47,10 @@ Car.update = function () {
 Car.draw = function () {
   for (var i = 0; i < Car.all.length; ++i) {
     var car = Car.all[i];
-    if (car.alive) {
-      Graphics.car(car.x, car.y, 0, car.vx/Math.abs(car.vx));
-    }
+    if (car.alive)
+      Graphics.car(car.x, car.y, this.viewmap[car.type],
+                   car.vx/Math.abs(car.vx),
+                   car.type == "player" ? 1 : -1);
   }
 }
 
