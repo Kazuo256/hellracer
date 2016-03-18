@@ -48,6 +48,7 @@ Game.update = function() {
 };
 
 Game.draw = function() {
+  if (!this.active) SMOOTH = 0;
   Graphics.clear();
   Car.draw();
 };

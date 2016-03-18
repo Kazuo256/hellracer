@@ -32,12 +32,26 @@ Car.update = function () {
   }
 }
 
+Car.checkCollisions = function (car) {
+  var collisions = []
+  for (var i = 0; i < Car.all.length; ++i) {
+    if (i != car.id) {
+      var other = this.all[i];
+      var dx = car.x - other.x;
+      var dy = car.y - other.y;
+      if (dx*dx + dy*dy < 4*4)
+        collisions.push(other);
+    }
+  }
+  return collisions;
+}
+
 Car.draw = function () {
   for (var i = 0; i < Car.all.length; ++i) {
     var car = Car.all[i];
     if (car.alive)
-      Graphics.car(car.x, car.y, this.viewmap[car.type],
-                   car.vx/Math.abs(car.vx));
+      Graphics.car(car.x + SMOOTH*car.vx, car.y + SMOOTH*car.vy,
+                   this.viewmap[car.type], car.vx/Math.abs(car.vx));
   }
 }
 
@@ -165,6 +179,7 @@ Game.update = function() {
 };
 
 Game.draw = function() {
+  if (!this.active) SMOOTH = 0;
   Graphics.clear();
   Car.draw();
 };
@@ -192,14 +207,15 @@ Graphics.setIdentity = function () {
   this.ctx.setTransform(1,0,0,1,0,0);
 }
 
-Graphics.clear = function () {
-  this.setIdentity()
+Graphics.clear = function (smooth) {
+  this.setIdentity();
+  // Draw road
   this.ctx.fillStyle = "#000";
   this.ctx.fillRect(0, 0, 800, 600);
   this.ctx.fillStyle = "#101510";
   this.ctx.fillRect(200, 0, 400, 600);
   // Draw stripes
-  this.ctx.translate(W/2, -H*(1 - this.scroll));
+  this.ctx.translate(W/2, -H*(1 - (this.scroll + SMOOTH*Game.speed/60)));
   this.ctx.fillStyle = "#232";
   for (var i = 0; i < 10; ++i) {
     this.ctx.fillRect(-4, i*H/10, 8, H/30);

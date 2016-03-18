@@ -30,13 +30,12 @@
 
         return function() {
             loops = 0;
-
             while ((new Date).getTime() > nextGameTick) {
                 Game.update();
                 nextGameTick += skipTicks;
                 loops++;
             }
-
+            SMOOTH = 1 - (nextGameTick - (new Date).getTime())/skipTicks;
             Game.draw();
         };
     })();

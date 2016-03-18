@@ -50,8 +50,8 @@ Car.draw = function () {
   for (var i = 0; i < Car.all.length; ++i) {
     var car = Car.all[i];
     if (car.alive)
-      Graphics.car(car.x, car.y, this.viewmap[car.type],
-                   car.vx/Math.abs(car.vx));
+      Graphics.car(car.x + SMOOTH*car.vx, car.y + SMOOTH*car.vy,
+                   this.viewmap[car.type], car.vx/Math.abs(car.vx));
   }
 }
 

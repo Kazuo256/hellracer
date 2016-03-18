@@ -21,14 +21,15 @@ Graphics.setIdentity = function () {
   this.ctx.setTransform(1,0,0,1,0,0);
 }
 
-Graphics.clear = function () {
-  this.setIdentity()
+Graphics.clear = function (smooth) {
+  this.setIdentity();
+  // Draw road
   this.ctx.fillStyle = "#000";
   this.ctx.fillRect(0, 0, 800, 600);
   this.ctx.fillStyle = "#101510";
   this.ctx.fillRect(200, 0, 400, 600);
   // Draw stripes
-  this.ctx.translate(W/2, -H*(1 - this.scroll));
+  this.ctx.translate(W/2, -H*(1 - (this.scroll + SMOOTH*Game.speed/60)));
   this.ctx.fillStyle = "#232";
   for (var i = 0; i < 10; ++i) {
     this.ctx.fillRect(-4, i*H/10, 8, H/30);
