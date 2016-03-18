@@ -37,8 +37,7 @@ Car.draw = function () {
     var car = Car.all[i];
     if (car.alive)
       Graphics.car(car.x, car.y, this.viewmap[car.type],
-                   car.vx/Math.abs(car.vx),
-                   car.type == "player" ? 1 : -1);
+                   car.vx/Math.abs(car.vx));
   }
 }
 
@@ -75,9 +74,9 @@ var Enemy = {}
 
 Enemy.initialize = function () {
   makeDomain(this);
-  this.create("smallfry", "straight", W/2-100, H/8, [0,2,300]);
+  this.create("smallfry", "straight", W/2-100, H/8, [1,2,300]);
   this.create("smallfry", "straight", W/2, H/8,     [0,2,300]);
-  this.create("smallfry", "straight", W/2+100, H/8, [0,2,300]);
+  this.create("smallfry", "straight", W/2+100, H/8, [-1,2,300]);
 }
 
 Enemy.findAI = function () {
@@ -88,8 +87,8 @@ Enemy.findAI = function () {
       if (--t <= 0)
         Enemy.destroy(this);
       else {
-        this.car.vx = dx;
-        this.car.vy = dy;
+        this.car.vx = Game.speed*dx;
+        this.car.vy = Game.speed*dy;
       }
     }
   }
@@ -214,10 +213,9 @@ Graphics.clear = function () {
   this.setIdentity();
 }
 
-Graphics.car = function (x, y, v, dir, side) {
+Graphics.car = function (x, y, v, dir) {
   this.setIdentity()
   this.ctx.translate(x, y);
-  this.ctx.scale(1,side);
   if (Math.abs(dir) > 0.01) {
     this.ctx.rotate(dir*20*Math.PI/180);
     this.ctx.scale(-dir,1)

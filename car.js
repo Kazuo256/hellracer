@@ -37,8 +37,7 @@ Car.draw = function () {
     var car = Car.all[i];
     if (car.alive)
       Graphics.car(car.x, car.y, this.viewmap[car.type],
-                   car.vx/Math.abs(car.vx),
-                   car.type == "player" ? 1 : -1);
+                   car.vx/Math.abs(car.vx));
   }
 }
 

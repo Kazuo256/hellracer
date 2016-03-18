@@ -42,10 +42,9 @@ Graphics.clear = function () {
   this.setIdentity();
 }
 
-Graphics.car = function (x, y, v, dir, side) {
+Graphics.car = function (x, y, v, dir) {
   this.setIdentity()
   this.ctx.translate(x, y);
-  this.ctx.scale(1,side);
   if (Math.abs(dir) > 0.01) {
     this.ctx.rotate(dir*20*Math.PI/180);
     this.ctx.scale(-dir,1)

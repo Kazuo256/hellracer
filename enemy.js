@@ -3,9 +3,9 @@ var Enemy = {}
 
 Enemy.initialize = function () {
   makeDomain(this);
-  this.create("smallfry", "straight", W/2-100, H/8, [0,2,300]);
+  this.create("smallfry", "straight", W/2-100, H/8, [1,2,300]);
   this.create("smallfry", "straight", W/2, H/8,     [0,2,300]);
-  this.create("smallfry", "straight", W/2+100, H/8, [0,2,300]);
+  this.create("smallfry", "straight", W/2+100, H/8, [-1,2,300]);
 }
 
 Enemy.findAI = function () {
@@ -16,8 +16,8 @@ Enemy.findAI = function () {
       if (--t <= 0)
         Enemy.destroy(this);
       else {
-        this.car.vx = dx;
-        this.car.vy = dy;
+        this.car.vx = Game.speed*dx;
+        this.car.vy = Game.speed*dy;
       }
     }
   }
