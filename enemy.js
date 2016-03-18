@@ -3,9 +3,6 @@ var Enemy = {}
 
 Enemy.initialize = function () {
   makeDomain(this);
-  this.create("smallfry", "straight", W/2-100, H/8, [1,2,300]);
-  this.create("smallfry", "straight", W/2, H/8,     [0,2,300]);
-  this.create("smallfry", "straight", W/2+100, H/8, [-1,2,300]);
 }
 
 Enemy.findAI = function () {
@@ -14,7 +11,7 @@ Enemy.findAI = function () {
   AIs.straight = function (dx, dy, t) {
     return function () {
       if (--t <= 0)
-        Enemy.destroy(this);
+        Enemy.remove(this);
       else {
         this.car.vx = Game.speed*dx;
         this.car.vy = Game.speed*dy;
@@ -41,6 +38,12 @@ Enemy.update = function () {
     var enemy = this.all[i];
     if (enemy.alive)
       enemy.update();
+  }
+  if (Math.random() > 0.80) {
+    var n = Math.floor(Math.random()*10);
+    for (var i = 0; i < n; ++i);
+      this.create("smallfry", "straight", 200 + 400*Math.random(), -32,
+                  [1-2*Math.random(), 4, 420]);
   }
 }
 

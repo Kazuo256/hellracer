@@ -6,7 +6,7 @@ var makeDomain = function (domain) {
   domain.create = function () {
     var newelement
     if (this.free.length > 0) {
-      newelement = this.all[free.shift()];
+      newelement = this.all[this.free.shift()];
     } else {
       newelement = {}
       this.all.push(newelement)

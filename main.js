@@ -47,7 +47,7 @@ Car.checkCollisions = function (car) {
       var other = this.all[i];
       var dx = car.x - other.x;
       var dy = car.y - other.y;
-      if (dx*dx + dy*dy < 8*8)
+      if (dx*dx + dy*dy < 16*16)
         return true;
     }
   }
@@ -79,7 +79,7 @@ var makeDomain = function (domain) {
   domain.create = function () {
     var newelement
     if (this.free.length > 0) {
-      newelement = this.all[free.shift()];
+      newelement = this.all[this.free.shift()];
     } else {
       newelement = {}
       this.all.push(newelement)
@@ -104,9 +104,6 @@ var Enemy = {}
 
 Enemy.initialize = function () {
   makeDomain(this);
-  this.create("smallfry", "straight", W/2-100, H/8, [1,2,300]);
-  this.create("smallfry", "straight", W/2, H/8,     [0,2,300]);
-  this.create("smallfry", "straight", W/2+100, H/8, [-1,2,300]);
 }
 
 Enemy.findAI = function () {
@@ -115,7 +112,7 @@ Enemy.findAI = function () {
   AIs.straight = function (dx, dy, t) {
     return function () {
       if (--t <= 0)
-        Enemy.destroy(this);
+        Enemy.remove(this);
       else {
         this.car.vx = Game.speed*dx;
         this.car.vy = Game.speed*dy;
@@ -142,6 +139,12 @@ Enemy.update = function () {
     var enemy = this.all[i];
     if (enemy.alive)
       enemy.update();
+  }
+  if (Math.random() > 0.80) {
+    var n = Math.floor(Math.random()*10);
+    for (var i = 0; i < n; ++i);
+      this.create("smallfry", "straight", 200 + 400*Math.random(), -32,
+                  [1-2*Math.random(), 4, 420]);
   }
 }
 
@@ -255,12 +258,6 @@ Graphics.clear = function (smooth) {
     this.ctx.fillRect(-4, i*H/10, 8, H/30);
     this.ctx.fillRect(-4, (10+i)*H/10, 8, H/30);
   }
-  // Draw HUD
-  this.setIdentity();
-  this.ctx.fillStyle = "#eee";
-  this.ctx.font = "32px Helvetica";
-  this.ctx.fillText(Math.floor(Game.speed*100) + "%", 16, 48);
-  this.setIdentity();
 }
 
 Graphics.draw = function () {
@@ -275,6 +272,17 @@ Graphics.draw = function () {
                          -sprite.w/2, -sprite.h/2, sprite.w, sprite.h);
     }
   }
+  // Lateral columns
+  this.setIdentity()
+  this.ctx.fillStyle = "#000";
+  this.ctx.fillRect(0, 0, 200, 600);
+  this.ctx.fillRect(600, 0, 200, 600);
+  // Draw HUD
+  this.setIdentity();
+  this.ctx.fillStyle = "#eee";
+  this.ctx.font = "32px Helvetica";
+  this.ctx.fillText(Math.floor(Game.speed*100) + "%", 16, 48);
+  this.setIdentity();
 }
 
 

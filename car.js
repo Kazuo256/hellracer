@@ -47,7 +47,7 @@ Car.checkCollisions = function (car) {
       var other = this.all[i];
       var dx = car.x - other.x;
       var dy = car.y - other.y;
-      if (dx*dx + dy*dy < 8*8)
+      if (dx*dx + dy*dy < 16*16)
         return true;
     }
   }

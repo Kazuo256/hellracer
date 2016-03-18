@@ -52,12 +52,6 @@ Graphics.clear = function (smooth) {
     this.ctx.fillRect(-4, i*H/10, 8, H/30);
     this.ctx.fillRect(-4, (10+i)*H/10, 8, H/30);
   }
-  // Draw HUD
-  this.setIdentity();
-  this.ctx.fillStyle = "#eee";
-  this.ctx.font = "32px Helvetica";
-  this.ctx.fillText(Math.floor(Game.speed*100) + "%", 16, 48);
-  this.setIdentity();
 }
 
 Graphics.draw = function () {
@@ -72,5 +66,16 @@ Graphics.draw = function () {
                          -sprite.w/2, -sprite.h/2, sprite.w, sprite.h);
     }
   }
+  // Lateral columns
+  this.setIdentity()
+  this.ctx.fillStyle = "#000";
+  this.ctx.fillRect(0, 0, 200, 600);
+  this.ctx.fillRect(600, 0, 200, 600);
+  // Draw HUD
+  this.setIdentity();
+  this.ctx.fillStyle = "#eee";
+  this.ctx.font = "32px Helvetica";
+  this.ctx.fillText(Math.floor(Game.speed*100) + "%", 16, 48);
+  this.setIdentity();
 }
 
