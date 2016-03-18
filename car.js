@@ -28,24 +28,30 @@ Car.update = function () {
   for (var i = 0; i < Car.all.length; ++i) {
     var car = Car.all[i];
     if (car.alive) {
-      car.x = Math.max(Math.min(car.x + car.vx, W-200), 200)
-      car.y = Math.max(Math.min(car.y + car.vy, H), 0)
+      if (car.type == "player") {
+        var dx = 200+16
+        var dy = 32
+        car.x = Math.max(Math.min(car.x + car.vx, W-dx), dx)
+        car.y = Math.max(Math.min(car.y + car.vy, H-dy), dy)
+      } else {
+        car.x += car.vx;
+        car.y += car.vy;
+      }
     }
   }
 }
 
 Car.checkCollisions = function (car) {
-  var collisions = []
   for (var i = 0; i < Car.all.length; ++i) {
     if (i != car.id) {
       var other = this.all[i];
       var dx = car.x - other.x;
       var dy = car.y - other.y;
-      if (dx*dx + dy*dy < 4*4)
-        collisions.push(other);
+      if (dx*dx + dy*dy < 8*8)
+        return true;
     }
   }
-  return collisions;
+  return false;
 }
 
 Car.bake = function () {

@@ -5,6 +5,7 @@ Player.speed = 6
 
 Player.initialize = function () {
   this.car = Car.create(W/2, H*6/8, "player");
+  this.alive = true;
   this.move = {
     left: false, right: false, up: false, down: false
   }
@@ -42,7 +43,14 @@ Player.axisV = function () {
 }
 
 Player.update = function () {
-  this.car.vx = this.speed*this.axisH()
-  this.car.vy = this.speed*this.axisV()
+  if (Car.checkCollisions(this.car)) {
+    this.car.alive = false;
+    this.car.sprite.alive = false;
+    this.alive = false;
+  }
+  if (this.alive) {
+    this.car.vx = this.speed*this.axisH()
+    this.car.vy = this.speed*this.axisV()
+  }
 }
 
