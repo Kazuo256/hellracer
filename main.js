@@ -120,6 +120,21 @@ Enemy.findAI = function () {
     }
   }
 
+  AIs.bend1 = function (tx, ty, t) {
+    var count = 0;
+    return function () {
+      if (++count > t)
+        Enemy.remove(this);
+      else if(this.car.y <= 200) {
+        this.car.vx = 0;
+        this.car.vy = Game.speed*4; 
+      } else {
+        this.car.vx = Game.speed*(tx-this.car.x)/(t/2);
+        this.car.vy = Game.speed*4;
+      }
+    }
+  }
+
   return function (which, args) {
     return AIs[which].apply(Enemy, args);
   }
@@ -143,8 +158,8 @@ Enemy.update = function () {
   if (Math.random() > 0.80) {
     var n = Math.floor(Math.random()*10);
     for (var i = 0; i < n; ++i);
-      this.create("smallfry", "straight", 200 + 400*Math.random(), -32,
-                  [1-2*Math.random(), 4, 420]);
+      this.create("smallfry", "bend1", 200 + 400*Math.random(), -32,
+                  [200+400*Math.random(), 632, 420]);
   }
 }
 
@@ -331,9 +346,7 @@ Player.axisV = function () {
 
 Player.update = function () {
   if (Car.checkCollisions(this.car)) {
-    this.car.alive = false;
-    this.car.sprite.alive = false;
-    this.alive = false;
+    Game.active = false
   }
   if (this.alive) {
     this.car.vx = this.speed*this.axisH()

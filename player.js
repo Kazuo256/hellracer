@@ -44,9 +44,7 @@ Player.axisV = function () {
 
 Player.update = function () {
   if (Car.checkCollisions(this.car)) {
-    this.car.alive = false;
-    this.car.sprite.alive = false;
-    this.alive = false;
+    Game.active = false
   }
   if (this.alive) {
     this.car.vx = this.speed*this.axisH()
