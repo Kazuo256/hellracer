@@ -173,9 +173,9 @@ Game.fps = 30;
 Game.initialize = function() {
   document.addEventListener("keydown", this.keyPressed.bind(this), false);
   document.addEventListener("keyup", this.keyReleased.bind(this), false);
-  var bgm = document.getElementById("bgm");
-  bgm.loop = true;
-  bgm.play();
+  this.bgm = document.getElementById("bgm");
+  this.bgm.loop = true;
+  this.bgm.play();
   this.setup();
 };
 
@@ -207,14 +207,18 @@ Game.keyChanged = function(key,state) {
 
 Game.pause = function () {
   this.state = 'paused';
+  this.bgm.pause();
 }
 
 Game.play = function () {
   this.state = 'active';
+  this.bgm.play();
 }
 
 Game.title = function () {
   this.state = 'title';
+  this.bgm.currentTime = 0;
+  this.bgm.pause();
 }
 
 Game.keyPressed = function(e) {
@@ -325,8 +329,8 @@ Graphics.foreground = function () {
   this.ctx.fillStyle = "#eee";
   this.ctx.font = "32px Helvetica";
   this.ctx.textAlign = 'left';
-  this.ctx.baseLine = 'top';
-  this.ctx.fillText(Math.floor(Game.speed*100) + "%", 16, 48);
+  this.ctx.textBaseline = 'top';
+  this.ctx.fillText(Math.floor(Game.speed*100) + "%", 16, 16);
 }
 
 Graphics.pauseOverlay = function () {

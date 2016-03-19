@@ -76,8 +76,8 @@ Graphics.foreground = function () {
   this.ctx.fillStyle = "#eee";
   this.ctx.font = "32px Helvetica";
   this.ctx.textAlign = 'left';
-  this.ctx.baseLine = 'top';
-  this.ctx.fillText(Math.floor(Game.speed*100) + "%", 16, 48);
+  this.ctx.textBaseline = 'top';
+  this.ctx.fillText(Math.floor(Game.speed*100) + "%", 16, 16);
 }
 
 Graphics.pauseOverlay = function () {
