@@ -74,10 +74,14 @@ Graphics.foreground = function () {
   // Draw HUD
   this.setIdentity();
   this.ctx.fillStyle = "#eee";
-  this.ctx.font = "32px Helvetica";
-  this.ctx.textAlign = 'left';
+  this.ctx.font = "24px Helvetica";
   this.ctx.textBaseline = 'top';
-  this.ctx.fillText(Math.floor(Game.speed*100) + "%", 16, 16);
+  this.ctx.textAlign = 'left';
+  this.ctx.fillText("Time", 16, 16);
+  this.ctx.fillText("Speed", 16, 64);
+  this.ctx.textAlign = 'right';
+  this.ctx.fillText(Game.getTime(), 200-16, 16);
+  this.ctx.fillText(Math.floor(Game.speed*100) + "%", 200-16, 64);
 }
 
 Graphics.pauseOverlay = function () {

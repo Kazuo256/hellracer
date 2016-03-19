@@ -20,6 +20,7 @@ Game.setup = function () {
   Player.initialize();
   Enemy.initialize();
   this.speed = 1;
+  this.time = 0;
 }
 
 Game.keyChanged = function(key,state) {
@@ -67,13 +68,23 @@ Game.keyReleased = function(e) {
   this.keyChanged(e.keyCode, false);
 }
 
+Game.getTime = function () {
+  var seconds = this.time/this.fps;
+  var minutes = Math.floor(seconds/60);
+  seconds = Math.floor(seconds%60);
+  minutes = minutes > 9 ? minutes : "0" + "" + minutes;
+  seconds = seconds > 9 ? seconds : "0" + "" + seconds;
+  return minutes + ":" + seconds;
+}
+
 Game.update = function() {
   if (this.state == 'active') {
     Player.update();
     Enemy.update();
     Car.update();
     Graphics.update();
-    this.speed += 0.01/this.fps;
+    this.speed += 0.02/this.fps;
+    ++this.time;
   }
 };
 
