@@ -18,6 +18,7 @@ Car.construct = function (newcar,x,y,type) {
   newcar.type = type;
   newcar.sprite = Graphics.create("car_sprite", x, y, 16, 32,
                                   this.viewmap[type]*32, 0, 1, 1, 0);
+  newcar.time = 0
 }
 
 Car.destroy = function(car) {
@@ -28,6 +29,7 @@ Car.update = function () {
   for (var i = 0; i < Car.all.length; ++i) {
     var car = Car.all[i];
     if (car.alive) {
+      ++car.time;
       if (car.type == "player") {
         var dx = 200+16
         var dy = 32
@@ -67,6 +69,7 @@ Car.bake = function () {
       } else car.sprite.sx = 1;
       car.sprite.r = dir*20*Math.PI/180;
       car.sprite.qx = this.viewmap[car.type]*32 + 16*dir*dir;
+      car.sprite.qy = 32*(Math.floor(car.time/5)%2)
     }
   }
 }
