@@ -19,7 +19,7 @@ Enemy.findAI = function () {
     }
   }
 
-  AIs.bend1 = function (tx, ty, t) {
+  AIs.bend1 = function (tx, t) {
     var count = 0;
     return function () {
       if (++count > t)
@@ -58,7 +58,7 @@ Enemy.update = function () {
     var n = Math.floor(Math.random()*10);
     for (var i = 0; i < n; ++i);
       this.create("smallfry", "bend1", 200 + 400*Math.random(), -32,
-                  [200+400*Math.random(), 632, 420]);
+                  [200+400*Math.random(), 420]);
   }
 }
 
