@@ -22,6 +22,8 @@ Game.setup = function () {
   Enemy.initialize();
   this.speed = 1;
   this.time = 0;
+  for (var i = 0; i < this.scores.length; ++i)
+    this.scores[i].last = false;
 }
 
 Game.keyChanged = function(key,state) {
@@ -76,8 +78,8 @@ Game.getTime = function () {
 }
 
 Game.addScore = function () {
-  this.scores.push(this.getTime());
-  this.scores.sort(function (a,b) { return b - a });
+  this.scores.push({ value: this.getTime(), last: true});
+  this.scores.sort(function (a,b) { return b.value - a.value });
   while (this.scores.length > 5)
     this.scores.pop();
 }

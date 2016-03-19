@@ -86,17 +86,23 @@ Graphics.foreground = function () {
   this.ctx.fillStyle = "#eee";
   this.ctx.font = "24px Helvetica";
   this.ctx.textBaseline = 'top';
+  // Left column
   this.ctx.textAlign = 'left';
   this.ctx.fillText("Time", 16, 16);
   this.ctx.fillText("Speed", 16, 64);
-  this.ctx.fillText("Highscores", 600+16, 16);
+  this.ctx.fillText("High Scores", 600+16, 16);
   for (var i = 0; i < this.ordinals.length; ++i)
     this.ctx.fillText(this.ordinals[i], 600+16, 64 + 32*i);
+  // Right column
   this.ctx.textAlign = 'right';
   this.ctx.fillText(this.formatTime(Game.getTime()), 200-16, 16);
   this.ctx.fillText(Math.floor(Game.speed*100) + "%", 200-16, 64);
-  for (var i = 0; i < Game.scores.length; ++i)
-    this.ctx.fillText(this.formatTime(Game.scores[i]), 800-16, 64 + 32*i);
+  for (var i = 0; i < Game.scores.length; ++i) {
+    var score = Game.scores[i];
+    if (score.last) this.ctx.fillStyle = "#4e8";
+    this.ctx.fillText(this.formatTime(score.value), 800-16, 64 + 32*i);
+    if (score.last) this.ctx.fillStyle = "#eee";
+  }
   for (var i = Game.scores.length; i < 5; ++i)
     this.ctx.fillText("--:--", 800-16, 64 + 32*i);
 }
