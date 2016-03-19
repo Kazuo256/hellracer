@@ -78,6 +78,8 @@ Game.getTime = function () {
 Game.addScore = function () {
   this.scores.push(this.getTime());
   this.scores.sort(function (a,b) { return b - a });
+  while (this.scores.length > 5)
+    this.scores.pop();
 }
 
 Game.update = function() {

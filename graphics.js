@@ -62,6 +62,8 @@ Graphics.formatTime = function (time) {
   return minutes + ":" + seconds;
 }
 
+Graphics.ordinals = ["1st", "2nd", "3rd", "4th", "5th"];
+
 Graphics.foreground = function () {
   for (var i = 0; i < this.all.length; ++i) {
     var sprite = this.all[i];
@@ -88,11 +90,15 @@ Graphics.foreground = function () {
   this.ctx.fillText("Time", 16, 16);
   this.ctx.fillText("Speed", 16, 64);
   this.ctx.fillText("Highscores", 600+16, 16);
+  for (var i = 0; i < this.ordinals.length; ++i)
+    this.ctx.fillText(this.ordinals[i], 600+16, 64 + 32*i);
   this.ctx.textAlign = 'right';
   this.ctx.fillText(this.formatTime(Game.getTime()), 200-16, 16);
   this.ctx.fillText(Math.floor(Game.speed*100) + "%", 200-16, 64);
   for (var i = 0; i < Game.scores.length; ++i)
-    this.ctx.fillText(this.formatTime(Game.scores[i]), 800-16, 48 + 32*i);
+    this.ctx.fillText(this.formatTime(Game.scores[i]), 800-16, 64 + 32*i);
+  for (var i = Game.scores.length; i < 5; ++i)
+    this.ctx.fillText("--:--", 800-16, 64 + 32*i);
 }
 
 Graphics.pauseOverlay = function () {
