@@ -7,6 +7,9 @@ Graphics.initialize = function (ctx) {
   this.scroll = 0;
   this.car_sprite = document.getElementById("car_sprite");
   this.explo_sprite = document.getElementById("explo_sprite");
+  this.explo_sound = document.getElementById("explo_sfx");
+  this.explo_sound.loop = false;
+  this.explo_sound.volume = 0.6;
   this.explo = false;
 }
 
@@ -30,7 +33,8 @@ Graphics.destroy = function (sprite) {
 }
 
 Graphics.explode = function (x, y) {
-  this.explo = { x:x, y:y, t:30 }
+  this.explo = { x:x, y:y, t:20 }
+  this.explo_sound.play();
 }
 
 Graphics.update = function () {
@@ -89,7 +93,7 @@ Graphics.foreground = function () {
   if (this.explo != false) {
     this.setIdentity();
     this.ctx.translate(this.explo.x, this.explo.y);
-    var step = Math.floor((30 - this.explo.t)/7.5);
+    var step = Math.floor(4*(1 - this.explo.t/20));
     this.ctx.drawImage(this.explo_sprite, step*16, 0, 16, 16, -8, -8, 16, 16);
   }
   // Lateral columns
