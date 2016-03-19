@@ -31,6 +31,10 @@ Enemy.findAI = function () {
         this.car.body.vx = Game.speed*(tx-this.car.body.x)/(t/2);
         this.car.body.vy = Game.speed*4;
       }
+      if (count == 15 && Math.random() < 0.25) {
+        Bullet.create(this.car.body.x, this.car.body.y,
+                      Player.car.body.x, Player.car.body.y);
+      }
     }
   }
 
@@ -54,7 +58,7 @@ Enemy.update = function () {
     if (enemy.alive)
       enemy.update();
   }
-  if (Math.random() > 0.80) {
+  if (Math.random() < 0.10) {
     var n = Math.floor(Math.random()*10);
     for (var i = 0; i < n; ++i);
       this.create("smallfry", "bend1", 200 + 400*Math.random(), -32,

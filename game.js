@@ -19,6 +19,7 @@ Game.setup = function () {
   Graphics.initialize(document.getElementById("canvas").getContext("2d"));
   Body.initialize();
   Car.initialize();
+  Bullet.initialize();
   Player.initialize();
   Enemy.initialize();
   this.speed = 1;
@@ -90,6 +91,7 @@ Game.update = function() {
     Player.update();
     Enemy.update();
     Car.update();
+    Bullet.update();
     Body.update();
     Graphics.update();
     this.speed += 0.02/this.fps;
@@ -101,6 +103,7 @@ Game.draw = function() {
   if (this.state != 'active') SMOOTH = 0;
   Graphics.background();
   Car.bake();      
+  Bullet.bake();      
   Graphics.foreground();
   if (this.state == 'paused') {
     Graphics.pauseOverlay();
