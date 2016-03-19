@@ -175,7 +175,7 @@ Game.initialize = function() {
   document.addEventListener("keyup", this.keyReleased.bind(this), false);
   this.bgm = document.getElementById("bgm");
   this.bgm.loop = true;
-  this.bgm.play();
+  this.state = 'title';
   this.setup();
 };
 
@@ -185,7 +185,6 @@ Game.setup = function () {
   Player.initialize();
   Enemy.initialize();
   this.speed = 1;
-  this.state = 'active';
 }
 
 Game.keyChanged = function(key,state) {
@@ -201,7 +200,9 @@ Game.keyChanged = function(key,state) {
     if (this.state == 'active')
       this.pause();
     else if (this.state == 'paused')
-      this.play()
+      this.play();
+  } else if (key == '13' && this.state == 'title') {
+    this.play();
   }
 }
 
@@ -211,6 +212,8 @@ Game.pause = function () {
 }
 
 Game.play = function () {
+  if (this.state == 'title')
+    Game.setup();
   this.state = 'active';
   this.bgm.play();
 }
@@ -335,8 +338,6 @@ Graphics.foreground = function () {
 
 Graphics.pauseOverlay = function () {
   this.setIdentity();
-  this.ctx.fillStyle = "#333";
-  this.ctx.fillRect(300, 265, 200, 70);
   this.ctx.font = "50px Helvetica";
   this.ctx.textAlign = 'center';
   this.ctx.textBaseline = 'middle';
@@ -345,7 +346,11 @@ Graphics.pauseOverlay = function () {
 }
 
 Graphics.titleOverlay = function () {
-
+  this.ctx.font = "50px Helvetica";
+  this.ctx.textAlign = 'center';
+  this.ctx.textBaseline = 'middle';
+  this.ctx.fillStyle = "#eee";
+  this.ctx.fillText("Press ENTER to start", 400, 300);
 }
 
 

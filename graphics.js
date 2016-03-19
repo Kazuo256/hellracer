@@ -82,8 +82,6 @@ Graphics.foreground = function () {
 
 Graphics.pauseOverlay = function () {
   this.setIdentity();
-  this.ctx.fillStyle = "#333";
-  this.ctx.fillRect(300, 265, 200, 70);
   this.ctx.font = "50px Helvetica";
   this.ctx.textAlign = 'center';
   this.ctx.textBaseline = 'middle';
@@ -92,6 +90,10 @@ Graphics.pauseOverlay = function () {
 }
 
 Graphics.titleOverlay = function () {
-
+  this.ctx.font = "50px Helvetica";
+  this.ctx.textAlign = 'center';
+  this.ctx.textBaseline = 'middle';
+  this.ctx.fillStyle = "#eee";
+  this.ctx.fillText("Press ENTER to start", 400, 300);
 }
 
