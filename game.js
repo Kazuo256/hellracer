@@ -79,6 +79,10 @@ Game.getTime = function () {
   return this.time/this.fps;
 }
 
+Game.loseTime = function (amount) {
+  this.time = Math.max(0, this.time - amount*this.fps);
+}
+
 Game.addScore = function () {
   this.scores.push({ value: this.getTime(), last: true});
   this.scores.sort(function (a,b) { return b.value - a.value });

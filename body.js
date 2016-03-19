@@ -32,6 +32,7 @@ Body.update = function () {
 }
 
 Body.checkCollisions = function (body, group_name) {
+  var collisions = []
   var group = this.groups[group_name]
   var body_ids = Object.keys(group);
   for (var i = 0; i < body_ids.length; ++i) {
@@ -40,9 +41,9 @@ Body.checkCollisions = function (body, group_name) {
       var dx = body.x - other.x;
       var dy = body.y - other.y;
       if (dx*dx + dy*dy < 16*16)
-        return true;
+        collisions.push(other);
     }
   }
-  return false;
+  return collisions;
 }
 

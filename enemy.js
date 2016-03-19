@@ -58,7 +58,7 @@ Enemy.update = function () {
     if (enemy.alive)
       enemy.update();
   }
-  if (Math.random() < 0.10) {
+  if (Math.random() < 0.20) {
     var n = Math.floor(Math.random()*10);
     for (var i = 0; i < n; ++i);
       this.create("smallfry", "bend1", 200 + 400*Math.random(), -32,

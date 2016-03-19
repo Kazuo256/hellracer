@@ -27,7 +27,8 @@ Bullet.update = function () {
     var bullet = Bullet.all[i];
     if (bullet.alive) {
       --bullet.time;
-      if (bullet.time <= 0) this.remove(bullet);
+      if (bullet.time <= 0 || bullet.body.hit == true)
+        this.remove(bullet);
     }
   }
 }
