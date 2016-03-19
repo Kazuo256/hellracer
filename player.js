@@ -43,13 +43,17 @@ Player.axisV = function () {
 }
 
 Player.update = function () {
-  if (Car.checkCollisions(this.car)) {
-    // Shinde shimatta
-    Game.title()
-  }
   if (this.alive) {
+    if (Car.checkCollisions(this.car)) {
+      // Shinde shimatta
+      this.alive = false;
+      Graphics.explode(this.car.x, this.car.y);
+      Car.remove(this.car);
+    }
     this.car.vx = this.speed*this.axisH()
     this.car.vy = this.speed*this.axisV()
+  } else if (Graphics.explo == false) {
+    Game.title()
   }
 }
 

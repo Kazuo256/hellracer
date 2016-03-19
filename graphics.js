@@ -5,7 +5,9 @@ Graphics.initialize = function (ctx) {
   makeDomain(this);
   this.ctx = ctx;
   this.scroll = 0;
-  this.car_sprite = document.getElementById("car_sprite")
+  this.car_sprite = document.getElementById("car_sprite");
+  this.explo_sprite = document.getElementById("explo_sprite");
+  this.explo = false;
 }
 
 Graphics.car_size = 8;
@@ -27,11 +29,17 @@ Graphics.destroy = function (sprite) {
   // nothing
 }
 
+Graphics.explode = function (x, y) {
+  this.explo = { x:x, y:y, t:30 }
+}
+
 Graphics.update = function () {
   this.scroll += Game.speed/60;
   while (this.scroll >= 1) {
     this.scroll -= 1
   }
+  if (this.explo != false && --this.explo.t <= 0)
+    this.explo = false;
 }
 
 Graphics.setIdentity = function () {
@@ -65,6 +73,7 @@ Graphics.formatTime = function (time) {
 Graphics.ordinals = ["1st", "2nd", "3rd", "4th", "5th"];
 
 Graphics.foreground = function () {
+  // Draw cars
   for (var i = 0; i < this.all.length; ++i) {
     var sprite = this.all[i];
     if (sprite.alive) {
@@ -75,6 +84,13 @@ Graphics.foreground = function () {
       this.ctx.drawImage(sprite.img, sprite.qx, sprite.qy, sprite.w, sprite.h,
                          -sprite.w/2, -sprite.h/2, sprite.w, sprite.h);
     }
+  }
+  // Draw explosion
+  if (this.explo != false) {
+    this.setIdentity();
+    this.ctx.translate(this.explo.x, this.explo.y);
+    var step = Math.floor((30 - this.explo.t)/7.5);
+    this.ctx.drawImage(this.explo_sprite, step*16, 0, 16, 16, -8, -8, 16, 16);
   }
   // Lateral columns
   this.setIdentity()
