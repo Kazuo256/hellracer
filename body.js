@@ -4,7 +4,7 @@ var Body = {}
 Body.initialize = function () {
   makeDomain(this);
   Body.groups = {
-    player:{}, smallfry:{}, bullet:{}
+    player:{}, smallfry:{}, bullet:{}, trap:{}
   };
 }
 

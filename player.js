@@ -55,6 +55,11 @@ Player.update = function () {
       Game.loseTime(5);
       bullets[i].hit = true;
     }
+    var traps = Body.checkCollisions(this.car.body, "trap")
+    for (var i = 0; i < traps.length; ++i) {
+      Enemy.danger();
+      traps[i].hit = true;
+    }
     var dx = 200+16
     var dy = 32
     this.car.body.x = Math.max(Math.min(this.car.body.x, W-dx), dx)

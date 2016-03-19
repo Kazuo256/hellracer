@@ -20,6 +20,7 @@ Game.setup = function () {
   Body.initialize();
   Car.initialize();
   Bullet.initialize();
+  Trap.initialize();
   Player.initialize();
   Enemy.initialize();
   this.speed = 1;
@@ -96,6 +97,7 @@ Game.update = function() {
     Enemy.update();
     Car.update();
     Bullet.update();
+    Trap.update();
     Body.update();
     Graphics.update();
     ++this.time;
@@ -109,6 +111,7 @@ Game.draw = function() {
   Graphics.background();
   Car.bake();      
   Bullet.bake();      
+  Trap.bake();      
   Graphics.foreground();
   if (this.state == 'paused') {
     Graphics.pauseOverlay();
