@@ -11,60 +11,34 @@ Car.initialize = function () {
 }
 
 Car.construct = function (newcar,x,y,type) {
-  newcar.x = x;
-  newcar.y = y;
-  newcar.vx = 0;
-  newcar.vy = 0;
   newcar.type = type;
+  newcar.body = Body.create(x,y,type)
   newcar.sprite = Graphics.create("car_sprite", x, y, 16, 32,
                                   this.viewmap[type]*32, 0, 1, 1, 0);
-  newcar.time = 0
+  newcar.time = 0;
 }
 
 Car.destroy = function(car) {
   Graphics.remove(car.sprite);
+  Body.remove(car.body);
 }
 
 Car.update = function () {
   for (var i = 0; i < Car.all.length; ++i) {
     var car = Car.all[i];
-    if (car.alive) {
-      ++car.time;
-      if (car.type == "player") {
-        var dx = 200+16
-        var dy = 32
-        car.x = Math.max(Math.min(car.x + car.vx, W-dx), dx)
-        car.y = Math.max(Math.min(car.y + car.vy, H-dy), dy)
-      } else {
-        car.x += car.vx;
-        car.y += car.vy;
-      }
-    }
+    if (car.alive) ++car.time;
   }
-}
-
-Car.checkCollisions = function (car) {
-  for (var i = 0; i < Car.all.length; ++i) {
-    if (i != car.id) {
-      var other = this.all[i];
-      var dx = car.x - other.x;
-      var dy = car.y - other.y;
-      if (dx*dx + dy*dy < 16*16)
-        return true;
-    }
-  }
-  return false;
 }
 
 Car.bake = function () {
   for (var i = 0; i < Car.all.length; ++i) {
     var car = Car.all[i];
     if (car.alive) {
-      car.sprite.x = car.x + SMOOTH*car.vx;
-      car.sprite.y = car.y + SMOOTH*car.vy;
+      car.sprite.x = car.body.x + SMOOTH*car.body.vx;
+      car.sprite.y = car.body.y + SMOOTH*car.body.vy;
       var dir = 0;
-      if (car.vx != 0) {
-        dir = car.vx/Math.abs(car.vx);
+      if (car.body.vx != 0) {
+        dir = car.body.vx/Math.abs(car.body.vx);
         car.sprite.sx = -dir;
       } else car.sprite.sx = 1;
       car.sprite.r = dir*20*Math.PI/180;

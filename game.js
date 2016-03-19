@@ -17,7 +17,9 @@ Game.initialize = function() {
 
 Game.setup = function () {
   Graphics.initialize(document.getElementById("canvas").getContext("2d"));
+  Body.initialize();
   Car.initialize();
+  Bullet.initialize();
   Player.initialize();
   Enemy.initialize();
   this.speed = 1;
@@ -77,6 +79,10 @@ Game.getTime = function () {
   return this.time/this.fps;
 }
 
+Game.loseTime = function (amount) {
+  this.time = Math.max(0, this.time - amount*this.fps);
+}
+
 Game.addScore = function () {
   this.scores.push({ value: this.getTime(), last: true});
   this.scores.sort(function (a,b) { return b.value - a.value });
@@ -89,9 +95,12 @@ Game.update = function() {
     Player.update();
     Enemy.update();
     Car.update();
+    Bullet.update();
+    Body.update();
     Graphics.update();
-    this.speed += 0.02/this.fps;
     ++this.time;
+    if (Math.floor(this.getTime()) >= ((this.speed-1)/0.2+1)*10)
+      this.speed = 1 + 0.2*Math.floor(this.getTime()/10);
   }
 };
 
@@ -99,6 +108,7 @@ Game.draw = function() {
   if (this.state != 'active') SMOOTH = 0;
   Graphics.background();
   Car.bake();      
+  Bullet.bake();      
   Graphics.foreground();
   if (this.state == 'paused') {
     Graphics.pauseOverlay();
