@@ -10,6 +10,7 @@ Game.initialize = function() {
   document.addEventListener("keyup", this.keyReleased.bind(this), false);
   this.bgm = document.getElementById("bgm");
   this.bgm.loop = true;
+  this.scores = [];
   this.state = 'title';
   this.setup();
 };
@@ -55,6 +56,8 @@ Game.play = function () {
 }
 
 Game.title = function () {
+  if (this.state == 'active')
+    this.addScore();
   this.state = 'title';
   this.bgm.currentTime = 0;
   this.bgm.pause();
@@ -69,12 +72,12 @@ Game.keyReleased = function(e) {
 }
 
 Game.getTime = function () {
-  var seconds = this.time/this.fps;
-  var minutes = Math.floor(seconds/60);
-  seconds = Math.floor(seconds%60);
-  minutes = minutes > 9 ? minutes : "0" + "" + minutes;
-  seconds = seconds > 9 ? seconds : "0" + "" + seconds;
-  return minutes + ":" + seconds;
+  return this.time/this.fps;
+}
+
+Game.addScore = function () {
+  this.scores.push(this.getTime());
+  this.scores.sort(function (a,b) { return b - a });
 }
 
 Game.update = function() {

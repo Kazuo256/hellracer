@@ -175,6 +175,7 @@ Game.initialize = function() {
   document.addEventListener("keyup", this.keyReleased.bind(this), false);
   this.bgm = document.getElementById("bgm");
   this.bgm.loop = true;
+  this.scores = [];
   this.state = 'title';
   this.setup();
 };
@@ -220,6 +221,8 @@ Game.play = function () {
 }
 
 Game.title = function () {
+  if (this.state == 'active')
+    this.addScore();
   this.state = 'title';
   this.bgm.currentTime = 0;
   this.bgm.pause();
@@ -234,12 +237,12 @@ Game.keyReleased = function(e) {
 }
 
 Game.getTime = function () {
-  var seconds = this.time/this.fps;
-  var minutes = Math.floor(seconds/60);
-  seconds = Math.floor(seconds%60);
-  minutes = minutes > 9 ? minutes : "0" + "" + minutes;
-  seconds = seconds > 9 ? seconds : "0" + "" + seconds;
-  return minutes + ":" + seconds;
+  return this.time/this.fps;
+}
+
+Game.addScore = function () {
+  this.scores.push(this.getTime());
+  this.scores.sort(function (a,b) { return b - a });
 }
 
 Game.update = function() {
@@ -321,6 +324,14 @@ Graphics.background = function (smooth) {
   }
 }
 
+Graphics.formatTime = function (time) {
+  var minutes = Math.floor(time/60);
+  var seconds = Math.floor(time%60);
+  minutes = minutes > 9 ? minutes : "0" + "" + minutes;
+  seconds = seconds > 9 ? seconds : "0" + "" + seconds;
+  return minutes + ":" + seconds;
+}
+
 Graphics.foreground = function () {
   for (var i = 0; i < this.all.length; ++i) {
     var sprite = this.all[i];
@@ -346,9 +357,12 @@ Graphics.foreground = function () {
   this.ctx.textAlign = 'left';
   this.ctx.fillText("Time", 16, 16);
   this.ctx.fillText("Speed", 16, 64);
+  this.ctx.fillText("Highscores", 600+16, 16);
   this.ctx.textAlign = 'right';
-  this.ctx.fillText(Game.getTime(), 200-16, 16);
+  this.ctx.fillText(this.formatTime(Game.getTime()), 200-16, 16);
   this.ctx.fillText(Math.floor(Game.speed*100) + "%", 200-16, 64);
+  for (var i = 0; i < Game.scores.length; ++i)
+    this.ctx.fillText(this.formatTime(Game.scores[i]), 800-16, 48 + 32*i);
 }
 
 Graphics.pauseOverlay = function () {
