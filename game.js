@@ -98,8 +98,9 @@ Game.update = function() {
     Bullet.update();
     Body.update();
     Graphics.update();
-    this.speed += 0.02/this.fps;
     ++this.time;
+    if (Math.floor(this.getTime()) >= ((this.speed-1)/0.2+1)*10)
+      this.speed = 1 + 0.2*Math.floor(this.getTime()/10);
   }
 };
 
