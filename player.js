@@ -44,14 +44,18 @@ Player.axisV = function () {
 
 Player.update = function () {
   if (this.alive) {
-    if (Car.checkCollisions(this.car)) {
+    if (Body.checkCollisions(this.car.body, "smallfry")) {
       // Shinde shimatta
       this.alive = false;
-      Graphics.explode(this.car.x, this.car.y);
+      Graphics.explode(this.car.body.x, this.car.body.y);
       Car.remove(this.car);
     }
-    this.car.vx = this.speed*this.axisH()
-    this.car.vy = this.speed*this.axisV()
+    var dx = 200+16
+    var dy = 32
+    this.car.body.x = Math.max(Math.min(this.car.body.x, W-dx), dx)
+    this.car.body.y = Math.max(Math.min(this.car.body.y, H-dy), dy)
+    this.car.body.vx = this.speed*this.axisH()
+    this.car.body.vy = this.speed*this.axisV()
   } else if (Graphics.explo == false) {
     Game.title()
   }

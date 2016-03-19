@@ -13,8 +13,8 @@ Enemy.findAI = function () {
       if (--t <= 0)
         Enemy.remove(this);
       else {
-        this.car.vx = Game.speed*dx;
-        this.car.vy = Game.speed*dy;
+        this.car.body.vx = Game.speed*dx;
+        this.car.body.vy = Game.speed*dy;
       }
     }
   }
@@ -24,12 +24,12 @@ Enemy.findAI = function () {
     return function () {
       if (++count > t)
         Enemy.remove(this);
-      else if(this.car.y <= 200) {
-        this.car.vx = 0;
-        this.car.vy = Game.speed*4; 
+      else if(this.car.body.y <= 200) {
+        this.car.body.vx = 0;
+        this.car.body.vy = Game.speed*4; 
       } else {
-        this.car.vx = Game.speed*(tx-this.car.x)/(t/2);
-        this.car.vy = Game.speed*4;
+        this.car.body.vx = Game.speed*(tx-this.car.body.x)/(t/2);
+        this.car.body.vy = Game.speed*4;
       }
     }
   }

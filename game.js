@@ -17,6 +17,7 @@ Game.initialize = function() {
 
 Game.setup = function () {
   Graphics.initialize(document.getElementById("canvas").getContext("2d"));
+  Body.initialize();
   Car.initialize();
   Player.initialize();
   Enemy.initialize();
@@ -89,6 +90,7 @@ Game.update = function() {
     Player.update();
     Enemy.update();
     Car.update();
+    Body.update();
     Graphics.update();
     this.speed += 0.02/this.fps;
     ++this.time;
