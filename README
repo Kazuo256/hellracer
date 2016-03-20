@@ -1,0 +1,43 @@
+
+Hell Racer - a web-based bullet hell survival game
+==================================================
+
+tl;dr: I like Touhou.
+
+First of all I must to say that I really tried to explore everything the test
+restrictions did not explicitly state (like car sizes or intended audience) in
+order to bring the game closer to a genre that I actually like. So let me just
+explain where the key "divergences" are:
+
+1. Game speed (the actual criteria for increasing it was not specified)
+
+The speed goes up 20% every 10 seconds, and not continuously over time. That
+makes it more perceptible, and hopefully more exciting.
+
+2. Impossible situations (they do not happen unless the player is bad)
+
+I made no direct attempt to avoid any such situation. By making smaller cars
+with smaller hitboxes (actually circle shapes), there is always a way out. The
+player might corner him or herself, but then that would be his or her own fault.
+
+3. Collisions (only the player collisions were explicitly demanded)
+
+For the collisions, I decided that only the player collides because otherwise
+the game would be too easy: the enemy cars would kill each other all the time.
+And since the other cars do not collide, they also lack an explosion animation.
+
+3. High score screen (it IS present upon game over)
+
+Since the high scores are always visible, the "game over" scene is just a
+freezed state between game sessions. That way the player can always check on
+his or hers target record while playing. It also made things easier for me,
+obviously.
+
+4. Obstacle types (just trying to be creative)
+
+Yeah, the cars shoot weird bullets and drop suspicious traps. The bullets revert
+5 seconds of the player's time (like the hole example). The traps trigger a
+"danger" event that lasts 10 seconds. During that time, the car spawn rate
+increases drastically. It might even cause a real impossible situation, but then
+again, it was the player's own fault for running over the trap =).
+
