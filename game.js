@@ -26,6 +26,7 @@ Game.setup = function () {
   Enemy.initialize();
   this.speed = 1;
   this.time = 0;
+  this.delay = 0;
   for (var i = 0; i < this.scores.length; ++i)
     this.scores[i].last = false;
 }
@@ -81,8 +82,12 @@ Game.getTime = function () {
   return this.time/this.fps;
 }
 
+Game.getDelay = function () {
+  return this.delay/this.fps;
+}
+
 Game.loseTime = function (amount) {
-  this.time = Math.max(0, this.time - amount*this.fps);
+  this.delay += amount*this.fps;
 }
 
 Game.addScore = function () {
@@ -101,7 +106,10 @@ Game.update = function() {
     Trap.update();
     Body.update();
     Graphics.update();
-    ++this.time;
+    if (this.delay > 0)
+      this.delay = Math.max(0, this.delay-1);
+    else
+      ++this.time;
     if (Math.floor(this.getTime()) >= ((this.speed-1)/0.2+1)*10)
       this.speed = 1 + 0.2*Math.floor(this.getTime()/10);
   }

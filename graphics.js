@@ -69,9 +69,11 @@ Graphics.background = function (smooth) {
 Graphics.formatTime = function (time) {
   var minutes = Math.floor(time/60);
   var seconds = Math.floor(time%60);
+  var fract   = Math.floor((time%60-seconds)*100);
   minutes = minutes > 9 ? minutes : "0" + "" + minutes;
   seconds = seconds > 9 ? seconds : "0" + "" + seconds;
-  return minutes + ":" + seconds;
+  fract = fract > 9 ? fract : "0" + "" + fract;
+  return minutes + ":" + seconds + ":" + fract;
 }
 
 Graphics.ordinals = ["1st", "2nd", "3rd", "4th", "5th"];
@@ -106,23 +108,33 @@ Graphics.foreground = function () {
   this.ctx.fillStyle = "#eee";
   this.ctx.font = "24px Helvetica";
   this.ctx.textBaseline = 'top';
-  // Left column
+  // Left aligned
   this.ctx.textAlign = 'left';
   this.ctx.fillText("Time", 16, 16);
   this.ctx.fillText("Speed", 16, 64);
   this.ctx.fillText("High Scores", 600+16, 16);
   for (var i = 0; i < this.ordinals.length; ++i)
     this.ctx.fillText(this.ordinals[i], 600+16, 64 + 32*i);
+  if (Game.delay > 0) {
+    this.ctx.fillStyle = "#e84";
+    this.ctx.fillText("Delay", 16, 64+48);
+  }
+  // Center aligned
   if (Enemy.bonus > 0) {
     this.ctx.fillStyle = "#e84";
     this.ctx.textAlign = 'center';
     this.ctx.fillText("DANGER!!!", 100, 300);
   }
-  // Right column
+  // Right aligned
   this.ctx.fillStyle = "#eee";
   this.ctx.textAlign = 'right';
   this.ctx.fillText(this.formatTime(Game.getTime()), 200-16, 16);
   this.ctx.fillText(Math.floor(Game.speed*100) + "%", 200-16, 64);
+  if (Game.delay > 0) {
+    this.ctx.fillStyle = "#e84";
+    this.ctx.fillText(this.formatTime(Game.getDelay()), 200-16, 64+48);
+    this.ctx.fillStyle = "#eee";
+  }
   for (var i = 0; i < Game.scores.length; ++i) {
     var score = Game.scores[i];
     if (score.last) this.ctx.fillStyle = "#4e8";
@@ -130,7 +142,7 @@ Graphics.foreground = function () {
     if (score.last) this.ctx.fillStyle = "#eee";
   }
   for (var i = Game.scores.length; i < 5; ++i)
-    this.ctx.fillText("--:--", 800-16, 64 + 32*i);
+    this.ctx.fillText("--:--:--", 800-16, 64 + 32*i);
 }
 
 Graphics.pauseOverlay = function () {
