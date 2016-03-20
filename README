@@ -61,10 +61,11 @@ makes it more perceptible, and hopefully more exciting.
 (2) Impossible situations (they do not happen unless the player is bad)
 
 I made no direct attempt to avoid any such situation. By making smaller cars
-with smaller hitboxes (actually circle shapes), there is always a way out. The
-player might corner him or herself, but then that would be his or her own fault.
+with smaller hitboxes (actually circle shapes) and balancing the spawn
+distribution, there is always a way out. The player might corner him or herself,
+but then that would be his or her own fault.
 
-(3). Collisions (only the player collisions were explicitly demanded)
+(3) Collisions (only the player collisions were explicitly demanded)
 
 For the collisions, I decided that only the player collides because otherwise
 the game would be too easy: the enemy cars would kill each other all the time.
