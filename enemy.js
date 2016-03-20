@@ -32,11 +32,12 @@ Enemy.findAI = function () {
         this.car.body.vx = Game.speed*(tx-this.car.body.x)/(t/2);
         this.car.body.vy = Game.speed*4;
       }
-      if (count == 15 && Math.random() < 0.25) {
+      if (count == Math.floor(15/Game.speed) && Math.random() < 0.25) {
         Bullet.create(this.car.body.x, this.car.body.y,
                       Player.car.body.x, Player.car.body.y);
       }
-      if (count == 15+Math.floor(Math.random()*120) && Math.random() < 0.1) {
+      if (count == Math.floor(Math.random()*120/Game.speed)
+          && Math.random() < 0.1) {
         Trap.create(this.car.body.x, this.car.body.y);
       }
     }
