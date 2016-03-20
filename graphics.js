@@ -113,7 +113,13 @@ Graphics.foreground = function () {
   this.ctx.fillText("High Scores", 600+16, 16);
   for (var i = 0; i < this.ordinals.length; ++i)
     this.ctx.fillText(this.ordinals[i], 600+16, 64 + 32*i);
+  if (Enemy.bonus > 0) {
+    this.ctx.fillStyle = "#e84";
+    this.ctx.textAlign = 'center';
+    this.ctx.fillText("DANGER!!!", 100, 300);
+  }
   // Right column
+  this.ctx.fillStyle = "#eee";
   this.ctx.textAlign = 'right';
   this.ctx.fillText(this.formatTime(Game.getTime()), 200-16, 16);
   this.ctx.fillText(Math.floor(Game.speed*100) + "%", 200-16, 64);

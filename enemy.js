@@ -32,7 +32,8 @@ Enemy.findAI = function () {
         this.car.body.vx = Game.speed*(tx-this.car.body.x)/(t/2);
         this.car.body.vy = Game.speed*4;
       }
-      if (count == Math.floor(15/Game.speed) && Math.random() < 0.25) {
+      if (count == Math.floor(15/Game.speed)
+          && Math.random() < 0.25 + 0.25*Enemy.bonus) {
         Bullet.create(this.car.body.x, this.car.body.y,
                       Player.car.body.x, Player.car.body.y);
       }
