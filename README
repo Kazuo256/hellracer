@@ -15,7 +15,6 @@ Source code files:
   enemy.js
   game.js
   graphics.js
-  main.js
   player.js
   trap.js
   index.html
