@@ -79,9 +79,9 @@ obviously.
 
 (5) Obstacle types (just trying to be creative)
 
-Yeah, the cars shoot weird bullets and drop suspicious traps. The bullets revert
-5 seconds of the player's time (like the hole example). The traps trigger a
-"danger" event that lasts 10 seconds. During that time, the car spawn rate
-increases drastically. It might even cause a real impossible situation, but then
-again, it was the player's own fault for running over the trap =).
+Yeah, the cars shoot weird bullets and drop suspicious traps. The bullets add
+5 seconds of delay to the timer (similar to the hole example). The traps
+trigger a "danger" event that lasts 10 seconds. During that time, the car spawn
+rate increases drastically. It might even cause a real impossible situation, but
+then again, it was the player's own fault for running over the trap =).
 
