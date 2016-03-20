@@ -7,7 +7,7 @@ Trap.initialize = function () {
 
 Trap.construct = function (newtrap,x,y) {
   newtrap.body = Body.create(x,y,'trap');
-  newtrap.body.vy = Game.speed;
+  newtrap.body.vy = 2*Game.speed;
   newtrap.sprite = Graphics.create("trap_sprite", x, y, 8, 8,
                                      0, 0, 1, 1, 0);
   newtrap.time = 600;
